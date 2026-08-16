@@ -1,0 +1,24 @@
+{
+  "name": "touche-pas-au-klaxon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass public/assets/scss/app.scss public/assets/css/app.css",
+    "sass:watch": "sass --watch public/assets/scss/app.scss public/assets/css/app.css"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kev-aj72/touche-pas-au-klaxon.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kev-aj72/touche-pas-au-klaxon/issues"
+  },
+  "homepage": "https://github.com/kev-aj72/touche-pas-au-klaxon#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "sass": "^1.102.0"
+  }
+}
