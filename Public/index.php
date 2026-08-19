@@ -11,6 +11,8 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
+session_start();
+
 $router = new Router([
     'base_folder' => '/touche-pas-au-klaxon/public',
     'debug' => true,

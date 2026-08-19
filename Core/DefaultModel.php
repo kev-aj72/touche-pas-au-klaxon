@@ -17,3 +17,18 @@ function findAll(string $stmt): array
 
     return $result;
 }
+
+function findOne(string $stmt, array $parameters): array|false
+{
+    // Connexion à la base de données
+    $bdd = connection();
+
+    // Préparation de la requête
+    $query = $bdd->prepare($stmt);
+
+    // Exécution avec les données sécurisées
+    $query->execute($parameters);
+
+    // Récupération d’une seule ligne
+    return $query->fetch(PDO::FETCH_ASSOC);
+}
