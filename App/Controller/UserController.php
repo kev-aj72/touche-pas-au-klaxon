@@ -58,6 +58,7 @@ class UserController
             'id_employe' => (int) $employe['id_employe'],
             'nom' => $employe['nom'],
             'prenom' => $employe['prenom'],
+            'telephone' => $employe['telephone'],
             'email' => $employe['email'],
             'role' => $employe['role'],
         ];

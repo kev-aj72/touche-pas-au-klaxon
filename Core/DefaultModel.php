@@ -4,31 +4,48 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/database.php';
 
-function findAll(string $stmt): array
-{
-    // Connexion à la base de données
+/**
+ * Récupère plusieurs lignes.
+ */
+function findAll(
+    string $stmt,
+    array $parameters = []
+): array {
     $bdd = connection();
 
-    // Exécution de la requête SQL reçue en paramètre
-    $query = $bdd->query($stmt);
-
-    // Récupération de toutes les lignes
-    $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
-    return $result;
-}
-
-function findOne(string $stmt, array $parameters): array|false
-{
-    // Connexion à la base de données
-    $bdd = connection();
-
-    // Préparation de la requête
     $query = $bdd->prepare($stmt);
 
-    // Exécution avec les données sécurisées
     $query->execute($parameters);
 
-    // Récupération d’une seule ligne
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Récupère une seule ligne.
+ */
+function findOne(
+    string $stmt,
+    array $parameters = []
+): array|false {
+    $bdd = connection();
+
+    $query = $bdd->prepare($stmt);
+
+    $query->execute($parameters);
+
     return $query->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Exécute une requête INSERT, UPDATE ou DELETE.
+ */
+function executeQuery(
+    string $stmt,
+    array $parameters = []
+): bool {
+    $bdd = connection();
+
+    $query = $bdd->prepare($stmt);
+
+    return $query->execute($parameters);
 }
