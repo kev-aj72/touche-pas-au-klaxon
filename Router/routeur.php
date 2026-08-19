@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-$router->get('/', 'App\Controller\HomeController@index');
+$router->get(
+    '/',
+    'App\Controller\HomeController@index'
+);
 
-// Affiche le formulaire
 $router->get(
     '/login',
     'App\Controller\UserController@login'
 );
 
-// Traite le formulaire
 $router->post(
     '/login',
     'App\Controller\UserController@authenticate'
@@ -19,6 +20,31 @@ $router->post(
 $router->post(
     '/logout',
     'App\Controller\UserController@logout'
+);
+
+$router->get(
+    '/trajets/ajouter',
+    'App\Controller\TrajetController@create'
+);
+
+$router->post(
+    '/trajets/ajouter',
+    'App\Controller\TrajetController@store'
+);
+
+$router->get(
+    '/trajets/:id/modifier',
+    'App\Controller\TrajetController@edit'
+);
+
+$router->post(
+    '/trajets/:id/modifier',
+    'App\Controller\TrajetController@update'
+);
+
+$router->post(
+    '/trajets/:id/supprimer',
+    'App\Controller\TrajetController@delete'
 );
 
 $router->get('/test', function (): string {
