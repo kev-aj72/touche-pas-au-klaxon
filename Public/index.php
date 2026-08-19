@@ -5,6 +5,11 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Buki\Router\Router;
+use Dotenv\Dotenv;
+
+// Chargement du fichier .env situé à la racine
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
 
 $router = new Router([
     'base_folder' => '/touche-pas-au-klaxon/public',
