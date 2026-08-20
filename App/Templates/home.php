@@ -11,6 +11,14 @@
     <?php if ($utilisateurConnecte !== null): ?>
         <p>Connecté : <?= $nomUtilisateur ?></p>
 
+        <?php if ($utilisateurConnecte['role'] === 'ADMIN'): ?>
+    <p>
+        <a href="/touche-pas-au-klaxon/public/admin">
+            Administration
+        </a>
+    </p>
+<?php endif; ?>
+
         <form
             action="/touche-pas-au-klaxon/public/logout"
             method="post"
