@@ -21,3 +21,21 @@ function getEmployeByEmail(string $email): array|false
         ]
     );
 }
+
+/**
+ * Récupère tous les employés.
+ */
+function getEmployes(): array
+{
+    return findAll(
+        'SELECT
+            id_employe,
+            nom,
+            prenom,
+            telephone,
+            email,
+            role
+        FROM employes
+        ORDER BY nom ASC, prenom ASC'
+    );
+}

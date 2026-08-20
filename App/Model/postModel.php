@@ -156,4 +156,68 @@ function deleteTrajet(
         ]
     );
 }
+
+/**
+ * Récupère tous les trajets pour l’administration.
+ */
+function getAllTrajets(): array
+{
+    return findAll(
+        'SELECT
+            trajets.id_trajet,
+            trajets.date_heure_depart,
+            trajets.date_heure_arrivee,
+            trajets.nombre_places_total,
+            trajets.nombre_places_disponibles,
+
+            depart.ville AS ville_depart,
+            arrivee.ville AS ville_arrivee,
+
+            employes.nom AS auteur_nom,
+            employes.prenom AS auteur_prenom
+
+        FROM trajets
+
+        INNER JOIN agences AS depart
+            ON depart.id_agence = trajets.id_agence_depart
+
+        INNER JOIN agences AS arrivee
+            ON arrivee.id_agence = trajets.id_agence_arrivee
+
+        INNER JOIN employes
+            ON employes.id_employe = trajets.id_employe
+
+        ORDER BY trajets.date_heure_depart DESC'
+    );
+}
+
+/**
+ * Supprime un trajet sans vérifier son auteur.
+ * Cette fonction est réservée à l’administration.
+ */
+function deleteTrajetAdmin(int $idTrajet): bool
+{
+    return executeQuery(
+        'DELETE FROM trajets
+        WHERE id_trajet = :id_trajet',
+        [
+            'id_trajet' => $idTrajet,
+        ]
+    );
+}
+
+/**
+ * Récupère un trajet avec son identifiant.
+ */
+function getTrajetById(int $idTrajet): array|false
+{
+    return findOne(
+        'SELECT id_trajet
+        FROM trajets
+        WHERE id_trajet = :id_trajet',
+        [
+            'id_trajet' => $idTrajet,
+        ]
+    );
+}
 ?>
