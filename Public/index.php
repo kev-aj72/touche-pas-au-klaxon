@@ -14,7 +14,7 @@ Dotenv::createImmutable($root)->load();
 session_start();
 
 $router = new Router([
-    'base_folder' => '/touche-pas-au-klaxon/public',
+    'base_folder' => $_ENV['APP_BASE_PATH'],
     'debug' => true,
 
     'paths' => [

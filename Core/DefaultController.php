@@ -12,12 +12,27 @@ abstract class DefaultController
     use TemplateTrait;
     use FlashMessageTrait;
 
-    protected function redirect(string $path): never
-    {
-        header(
-            'Location: /touche-pas-au-klaxon/public'
-            . $path
+    protected function url(
+        string $path = ''
+    ): string {
+        $basePath = rtrim(
+            $_ENV['APP_BASE_PATH'],
+            '/'
         );
+
+        if ($path === '' || $path === '/') {
+            return $basePath . '/';
+        }
+
+        return $basePath
+            . '/'
+            . ltrim($path, '/');
+    }
+
+    protected function redirect(
+        string $path
+    ): never {
+        header('Location: ' . $this->url($path));
 
         exit;
     }

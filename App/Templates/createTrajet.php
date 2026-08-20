@@ -6,53 +6,57 @@
 
 ?>
 
-<h1>Proposer un trajet</h1>
+<main>
+    <h1>Proposer un trajet</h1>
 
-<section>
-    <h2>Contact du trajet</h2>
+    <section>
+        <h2>Contact du trajet</h2>
 
-    <p>
-        Nom :
-        <?= $this->escape(
-            $auteur['prenom']
+        <p>
+            Nom :
+            <?= $this->escape(
+                $auteur['prenom']
                 . ' '
                 . $auteur['nom']
-        ) ?>
-    </p>
+            ) ?>
+        </p>
 
-    <p>
-        Téléphone :
-        <?= $this->escape($auteur['telephone']) ?>
-    </p>
+        <p>
+            Téléphone :
+            <?= $this->escape(
+                $auteur['telephone']
+            ) ?>
+        </p>
 
-    <p>
-        Email :
-        <?= $this->escape($auteur['email']) ?>
-    </p>
-</section>
+        <p>
+            Email :
+            <?= $this->escape(
+                $auteur['email']
+            ) ?>
+        </p>
+    </section>
 
-<?= $this->component(
-    'messages',
-    [
-        'error' => $error !== null
-            ? $this->escape($error)
-            : null,
-    ]
-) ?>
+    <?= $this->component(
+        'messages',
+        [
+            'error' => $error,
+        ]
+    ) ?>
 
-<?= $this->component(
-    'trajetForm',
-    [
-        'action' =>
-            '/touche-pas-au-klaxon/public/trajets/ajouter',
+    <?= $this->component(
+        'trajetForm',
+        [
+            'action' =>
+                $this->url('/trajets/ajouter'),
 
-        'submitLabel' =>
-            'Créer le trajet',
+            'submitLabel' =>
+                'Créer le trajet',
 
-        'agences' =>
-            $agences,
+            'agences' =>
+                $agences,
 
-        'trajet' =>
-            [],
-    ]
-) ?>
+            'trajet' =>
+                null,
+        ]
+    ) ?>
+</main>

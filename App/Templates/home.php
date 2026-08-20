@@ -2,21 +2,9 @@
 
 /** @var array $trajetsAffiches */
 /** @var array|null $utilisateurConnecte */
-/** @var string|null $nomUtilisateur */
 /** @var string|null $messageSucces */
 
 ?>
-
-<?= $this->component(
-    'header',
-    [
-        'utilisateurConnecte' =>
-            $utilisateurConnecte,
-
-        'nomUtilisateur' =>
-            $nomUtilisateur,
-    ]
-) ?>
 
 <main>
     <?= $this->component(
@@ -29,13 +17,15 @@
     <h1>Trajets proposés</h1>
 
     <?php if ($utilisateurConnecte !== null): ?>
-        <a href="/touche-pas-au-klaxon/public/trajets/ajouter">
+        <a href="<?= $this->url('/trajets/ajouter') ?>">
             Proposer un trajet
         </a>
     <?php endif; ?>
 
     <?php if ($trajetsAffiches === []): ?>
-        <p>Aucun trajet disponible pour le moment.</p>
+        <p>
+            Aucun trajet disponible pour le moment.
+        </p>
     <?php else: ?>
         <table>
             <thead>

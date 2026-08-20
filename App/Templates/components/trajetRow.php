@@ -42,15 +42,25 @@
         <td>
             <?php if ($trajet['est_auteur']): ?>
                 <a
-                    href="/touche-pas-au-klaxon/public/trajets/<?= $trajet['id_trajet'] ?>/modifier"
+                    href="<?= $this->url(
+                        '/trajets/'
+                        . $trajet['id_trajet']
+                        . '/modifier'
+                    ) ?>"
                 >
                     Modifier
                 </a>
 
                 <form
-                    action="/touche-pas-au-klaxon/public/trajets/<?= $trajet['id_trajet'] ?>/supprimer"
+                    action="<?= $this->url(
+                        '/trajets/'
+                        . $trajet['id_trajet']
+                        . '/supprimer'
+                    ) ?>"
                     method="post"
-                    onsubmit="return confirm('Supprimer ce trajet ?');"
+                    onsubmit="return confirm(
+                        'Supprimer ce trajet ?'
+                    );"
                 >
                     <button type="submit">
                         Supprimer

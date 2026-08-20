@@ -5,23 +5,27 @@
 
 ?>
 
-<h1>Modifier le trajet</h1>
+<main>
+    <h1>Modifier le trajet</h1>
 
-<?= $this->component(
-    'trajetForm',
-    [
-        'action' =>
-            '/touche-pas-au-klaxon/public/trajets/'
-            . (int) $trajet['id_trajet']
-            . '/modifier',
+    <?= $this->component(
+        'trajetForm',
+        [
+            'action' =>
+                $this->url(
+                    '/trajets/'
+                    . (int) $trajet['id_trajet']
+                    . '/modifier'
+                ),
 
-        'submitLabel' =>
-            'Enregistrer les modifications',
+            'submitLabel' =>
+                'Enregistrer les modifications',
 
-        'agences' =>
-            $agences,
+            'agences' =>
+                $agences,
 
-        'trajet' =>
-            $trajet,
-    ]
-) ?>
+            'trajet' =>
+                $trajet,
+        ]
+    ) ?>
+</main>

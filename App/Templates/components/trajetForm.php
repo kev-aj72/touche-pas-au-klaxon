@@ -3,14 +3,12 @@
 /** @var string $action */
 /** @var string $submitLabel */
 /** @var array $agences */
-/** @var array $trajet */
+/** @var array|null $trajet */
 
-$trajet = $trajet ?? [];
-
-$idDepart =
+$idAgenceDepart =
     (int) ($trajet['id_agence_depart'] ?? 0);
 
-$idArrivee =
+$idAgenceArrivee =
     (int) ($trajet['id_agence_arrivee'] ?? 0);
 
 $dateDepart = isset($trajet['date_heure_depart'])
@@ -28,7 +26,7 @@ $dateArrivee = isset($trajet['date_heure_arrivee'])
     : '';
 
 $nombrePlaces =
-    $trajet['nombre_places_total'] ?? '';
+    (int) ($trajet['nombre_places_total'] ?? 1);
 
 ?>
 
@@ -54,11 +52,13 @@ $nombrePlaces =
                 <option
                     value="<?= (int) $agence['id_agence'] ?>"
                     <?= (int) $agence['id_agence']
-                        === $idDepart
+                        === $idAgenceDepart
                         ? 'selected'
                         : '' ?>
                 >
-                    <?= $this->escape($agence['ville']) ?>
+                    <?= $this->escape(
+                        $agence['ville']
+                    ) ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -82,11 +82,13 @@ $nombrePlaces =
                 <option
                     value="<?= (int) $agence['id_agence'] ?>"
                     <?= (int) $agence['id_agence']
-                        === $idArrivee
+                        === $idAgenceArrivee
                         ? 'selected'
                         : '' ?>
                 >
-                    <?= $this->escape($agence['ville']) ?>
+                    <?= $this->escape(
+                        $agence['ville']
+                    ) ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -130,7 +132,8 @@ $nombrePlaces =
             id="nombre_places"
             name="nombre_places_total"
             min="1"
-            value="<?= (int) $nombrePlaces ?>"
+            max="255"
+            value="<?= $nombrePlaces ?>"
             required
         >
     </div>
@@ -139,7 +142,7 @@ $nombrePlaces =
         <?= $this->escape($submitLabel) ?>
     </button>
 
-    <a href="/touche-pas-au-klaxon/public/">
+    <a href="<?= $this->url('/') ?>">
         Annuler
     </a>
 </form>

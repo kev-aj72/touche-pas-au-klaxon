@@ -4,25 +4,28 @@
 
 ?>
 
-<h1>Modifier une agence</h1>
+<main>
+    <h1>Modifier une agence</h1>
 
-<?= $this->component('adminNavigation') ?>
+    <?= $this->component(
+        'adminNavigation'
+    ) ?>
 
-<?= $this->component(
-    'agenceForm',
-    [
-        'action' =>
-            '/touche-pas-au-klaxon/public/admin/agences/'
-            . $agenceAffichee['id_agence']
-            . '/modifier',
+    <?= $this->component(
+        'agenceForm',
+        [
+            'action' =>
+                $this->url(
+                    '/admin/agences/'
+                    . $agenceAffichee['id_agence']
+                    . '/modifier'
+                ),
 
-        'submitLabel' =>
-            'Enregistrer les modifications',
+            'submitLabel' =>
+                'Enregistrer les modifications',
 
-        'ville' =>
-            $agenceAffichee['ville'],
-
-        'cancelUrl' =>
-            '/touche-pas-au-klaxon/public/admin/agences',
-    ]
-) ?>
+            'agence' =>
+                $agenceAffichee,
+        ]
+    ) ?>
+</main>
