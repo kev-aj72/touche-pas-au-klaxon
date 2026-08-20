@@ -6,6 +6,8 @@
 
 <h1>Liste des employés</h1>
 
+<?= $this->component('adminNavigation') ?>
+
 <?php if ($employesAffiches === []): ?>
     <p>Aucun employé trouvé.</p>
 <?php else: ?>
@@ -21,7 +23,9 @@
         </thead>
 
         <tbody>
-            <?php foreach ($employesAffiches as $employe): ?>
+            <?php foreach (
+                $employesAffiches as $employe
+            ): ?>
                 <tr>
                     <td><?= $employe['nom'] ?></td>
                     <td><?= $employe['prenom'] ?></td>
@@ -33,9 +37,3 @@
         </tbody>
     </table>
 <?php endif; ?>
-
-<p>
-    <a href="/touche-pas-au-klaxon/public/admin">
-        Retour à l’administration
-    </a>
-</p>

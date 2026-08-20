@@ -2,40 +2,50 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../Core/DefaultModel.php';
+namespace App\Model;
 
-function getEmployeByEmail(string $email): array|false
-{
-    return findOne(
-        "SELECT
-            id_employe,
-            nom,
-            prenom,
-            email,
-            mot_de_passe,
-            role
-        FROM employes
-        WHERE email = :email",
-        [
-            'email' => $email,
-        ]
-    );
-}
+use Core\DefaultModel;
 
-/**
- * Récupère tous les employés.
- */
-function getEmployes(): array
+class UserModel extends DefaultModel
 {
-    return findAll(
-        'SELECT
-            id_employe,
-            nom,
-            prenom,
-            telephone,
-            email,
-            role
-        FROM employes
-        ORDER BY nom ASC, prenom ASC'
-    );
+    /**
+     * Recherche un employé avec son adresse email.
+     */
+    public function getEmployeByEmail(
+        string $email
+    ): array|false {
+        return $this->findOne(
+            'SELECT
+                id_employe,
+                nom,
+                prenom,
+                telephone,
+                email,
+                mot_de_passe,
+                role
+            FROM employes
+            WHERE email = :email',
+            [
+                'email' => $email,
+            ]
+        );
+    }
+
+    /**
+     * Récupère tous les employés.
+     */
+    public function getEmployes(): array
+    {
+        return $this->findAll(
+            'SELECT
+                id_employe,
+                nom,
+                prenom,
+                telephone,
+                email,
+                role
+            FROM employes
+            ORDER BY nom ASC, prenom ASC'
+        );
+    }
 }

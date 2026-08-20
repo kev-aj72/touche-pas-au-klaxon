@@ -8,35 +8,32 @@
 
 <h1>Gestion des agences</h1>
 
-<?php if ($messageSucces !== null): ?>
-    <p><?= $messageSucces ?></p>
-<?php endif; ?>
-<?php if ($messageErreur !== null): ?>
-    <p><?= $messageErreur ?></p>
-<?php endif; ?>
+<?= $this->component('adminNavigation') ?>
+
+<?= $this->component(
+    'messages',
+    [
+        'success' => $messageSucces,
+        'error' => $messageErreur,
+    ]
+) ?>
 
 <section>
     <h2>Ajouter une agence</h2>
 
-    <form
-        action="/touche-pas-au-klaxon/public/admin/agences/ajouter"
-        method="post"
-    >
-        <div>
-            <label for="ville">Ville</label>
+    <?= $this->component(
+        'agenceForm',
+        [
+            'action' =>
+                '/touche-pas-au-klaxon/public/admin/agences/ajouter',
 
-            <input
-                type="text"
-                id="ville"
-                name="ville"
-                required
-            >
-        </div>
+            'submitLabel' =>
+                'Ajouter l’agence',
 
-        <button type="submit">
-            Ajouter l’agence
-        </button>
-    </form>
+            'ville' =>
+                '',
+        ]
+    ) ?>
 </section>
 
 <section>
@@ -54,7 +51,9 @@
             </thead>
 
             <tbody>
-                <?php foreach ($agencesAffichees as $agence): ?>
+                <?php foreach (
+                    $agencesAffichees as $agence
+                ): ?>
                     <tr>
                         <td><?= $agence['ville'] ?></td>
 
@@ -81,9 +80,3 @@
         </table>
     <?php endif; ?>
 </section>
-
-<p>
-    <a href="/touche-pas-au-klaxon/public/admin">
-        Retour à l’administration
-    </a>
-</p>

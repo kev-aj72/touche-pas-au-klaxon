@@ -4,374 +4,264 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use DateTimeImmutable;
+use App\Model\AgenceModel;
+use App\Model\PostModel;
+use App\Model\UserModel;
+use Core\DefaultController;
+use Core\Traits\TrajetFormatterTrait;
 
-require_once __DIR__ . '/../Model/userModel.php';
-require_once __DIR__ . '/../Model/agenceModel.php';
-require_once __DIR__ . '/../Model/postModel.php';
-
-class AdminController
+class AdminController extends DefaultController
 {
-    /**
-     * Affiche le tableau de bord administrateur.
-     */
+    use TrajetFormatterTrait;
+
+    public function __construct(
+        private AgenceModel $agenceModel =
+            new AgenceModel(),
+
+        private PostModel $postModel =
+            new PostModel(),
+
+        private UserModel $userModel =
+            new UserModel()
+    ) {
+    }
+
     public function index(): string
     {
         $this->requireAdmin();
 
-        ob_start();
-
-        require dirname(__DIR__)
-            . '/Templates/admin/dashboard.php';
-
-        return (string) ob_get_clean();
+        return $this->render('admin/dashboard');
     }
 
-    /**
-     * Affiche la liste des employés.
-     */
     public function employes(): string
     {
         $this->requireAdmin();
 
-        $employes = \getEmployes();
         $employesAffiches = [];
 
-        foreach ($employes as $employe) {
+        foreach ($this->userModel->getEmployes() as $employe) {
             $employesAffiches[] = [
-                'nom' => htmlspecialchars(
-                    $employe['nom'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ),
-
-                'prenom' => htmlspecialchars(
-                    $employe['prenom'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ),
-
-                'telephone' => htmlspecialchars(
-                    $employe['telephone'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ),
-
-                'email' => htmlspecialchars(
-                    $employe['email'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ),
-
-                'role' => htmlspecialchars(
-                    $employe['role'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ),
+                'nom' => $this->escape($employe['nom']),
+                'prenom' => $this->escape($employe['prenom']),
+                'telephone' =>
+                    $this->escape($employe['telephone']),
+                'email' => $this->escape($employe['email']),
+                'role' => $this->escape($employe['role']),
             ];
         }
 
-        ob_start();
-
-        require dirname(__DIR__)
-            . '/Templates/admin/employes.php';
-
-        return (string) ob_get_clean();
-    }
-    /**
- * Affiche la liste des agences.
- */
-public function agences(): string
-{
-    $this->requireAdmin();
-
-    $agences = \getAgences();
-    $agencesAffichees = [];
-
-    foreach ($agences as $agence) {
-        $agencesAffichees[] = [
-            'id_agence' => (int) $agence['id_agence'],
-
-            'ville' => htmlspecialchars(
-                $agence['ville'],
-                ENT_QUOTES,
-                'UTF-8'
-            ),
-        ];
+        return $this->render(
+            'admin/employes',
+            ['employesAffiches' => $employesAffiches]
+        );
     }
 
-$messageSucces = $_SESSION['success'] ?? null;
-$messageErreur = $_SESSION['error'] ?? null;
-
-if ($messageSucces !== null) {
-    $messageSucces = htmlspecialchars(
-        $messageSucces,
-        ENT_QUOTES,
-        'UTF-8'
-    );
-}
-
-if ($messageErreur !== null) {
-    $messageErreur = htmlspecialchars(
-        $messageErreur,
-        ENT_QUOTES,
-        'UTF-8'
-    );
-}
-
-unset(
-    $_SESSION['success'],
-    $_SESSION['error']
-);
-
-    ob_start();
-
-    require dirname(__DIR__)
-        . '/Templates/admin/agences.php';
-
-    return (string) ob_get_clean();
-}
-
-/**
- * Enregistre une nouvelle agence.
- */
-public function storeAgence(): void
-{
-    $this->requireAdmin();
-
-    $ville = trim($_POST['ville'] ?? '');
-
-    if ($ville === '') {
-        $_SESSION['error'] = 'Le nom de la ville est obligatoire.';
-    } elseif (mb_strlen($ville) > 100) {
-        $_SESSION['error'] =
-            'Le nom de la ville ne peut pas dépasser 100 caractères.';
-    } elseif (\getAgenceByVille($ville) !== false) {
-        $_SESSION['error'] = 'Cette agence existe déjà.';
-    } else {
-        \createAgence($ville);
-
-        $_SESSION['success'] = 'L’agence a bien été créée.';
-    }
-
-    header(
-        'Location: /touche-pas-au-klaxon/public/admin/agences'
-    );
-
-    exit;
-}
-
-/**
- * Affiche le formulaire de modification d’une agence.
- */
-public function editAgence(int $id): string
-{
-    $this->requireAdmin();
-
-    $agence = \getAgenceById($id);
-
-    if ($agence === false) {
-        http_response_code(404);
-
-        return 'Agence introuvable.';
-    }
-
-    $agenceAffichee = [
-        'id_agence' => (int) $agence['id_agence'],
-
-        'ville' => htmlspecialchars(
-            $agence['ville'],
-            ENT_QUOTES,
-            'UTF-8'
-        ),
-    ];
-
-    ob_start();
-
-    require dirname(__DIR__)
-        . '/Templates/admin/editAgence.php';
-
-    return (string) ob_get_clean();
-}
-
-/**
- * Enregistre la modification d’une agence.
- */
-public function updateAgence(int $id): void
-{
-    $this->requireAdmin();
-
-    $agence = \getAgenceById($id);
-
-    if ($agence === false) {
-        http_response_code(404);
-
-        exit('Agence introuvable.');
-    }
-
-    $ville = trim($_POST['ville'] ?? '');
-    $agenceExistante = \getAgenceByVille($ville);
-
-    if ($ville === '') {
-        $_SESSION['error'] =
-            'Le nom de la ville est obligatoire.';
-    } elseif (mb_strlen($ville) > 100) {
-        $_SESSION['error'] =
-            'Le nom de la ville ne peut pas dépasser 100 caractères.';
-    } elseif (
-        $agenceExistante !== false
-        && (int) $agenceExistante['id_agence'] !== $id
-    ) {
-        $_SESSION['error'] =
-            'Une autre agence utilise déjà ce nom.';
-    } else {
-        \updateAgence($id, $ville);
-
-        $_SESSION['success'] =
-            'L’agence a bien été modifiée.';
-    }
-
-    header(
-        'Location: /touche-pas-au-klaxon/public/admin/agences'
-    );
-
-    exit;
-}
-
-/**
- * Supprime une agence si elle n’est utilisée par aucun trajet.
- */
-public function deleteAgence(int $id): void
-{
-    $this->requireAdmin();
-
-    $agence = \getAgenceById($id);
-
-    if ($agence === false) {
-        $_SESSION['error'] = 'Agence introuvable.';
-    } elseif (\isAgenceUsed($id)) {
-        $_SESSION['error'] =
-            'Cette agence ne peut pas être supprimée car elle est utilisée par un trajet.';
-    } else {
-        \deleteAgence($id);
-
-        $_SESSION['success'] =
-            'L’agence a bien été supprimée.';
-    }
-
-    header(
-        'Location: /touche-pas-au-klaxon/public/admin/agences'
-    );
-
-    exit;
-}
-
-/**
- * Affiche tous les trajets.
- */
-public function trajets(): string
-{
-    $this->requireAdmin();
-
-    $trajets = \getAllTrajets();
-    $trajetsAffiches = [];
-
-    foreach ($trajets as $trajet) {
-        $trajetsAffiches[] = [
-            'id_trajet' => (int) $trajet['id_trajet'],
-
-            'ville_depart' => htmlspecialchars(
-                $trajet['ville_depart'],
-                ENT_QUOTES,
-                'UTF-8'
-            ),
-
-            'ville_arrivee' => htmlspecialchars(
-                $trajet['ville_arrivee'],
-                ENT_QUOTES,
-                'UTF-8'
-            ),
-
-            'date_depart' => (
-                new DateTimeImmutable(
-                    $trajet['date_heure_depart']
-                )
-            )->format('d/m/Y à H:i'),
-
-            'date_arrivee' => (
-                new DateTimeImmutable(
-                    $trajet['date_heure_arrivee']
-                )
-            )->format('d/m/Y à H:i'),
-
-            'places_total' =>
-                (int) $trajet['nombre_places_total'],
-
-            'places_disponibles' =>
-                (int) $trajet['nombre_places_disponibles'],
-
-            'auteur' => htmlspecialchars(
-                $trajet['auteur_prenom']
-                    . ' '
-                    . $trajet['auteur_nom'],
-                ENT_QUOTES,
-                'UTF-8'
-            ),
-        ];
-    }
-
-    $messageSucces = $_SESSION['success'] ?? null;
-    $messageErreur = $_SESSION['error'] ?? null;
-
-    unset(
-        $_SESSION['success'],
-        $_SESSION['error']
-    );
-
-    ob_start();
-
-    require dirname(__DIR__)
-        . '/Templates/admin/trajets.php';
-
-    return (string) ob_get_clean();
-}
-
-/**
- * Permet à l’administrateur de supprimer n’importe quel trajet.
- */
-public function deleteTrajet(int $id): void
-{
-    $this->requireAdmin();
-
-    $trajet = \getTrajetById($id);
-
-    if ($trajet === false) {
-        $_SESSION['error'] = 'Trajet introuvable.';
-    } else {
-        \deleteTrajetAdmin($id);
-
-        $_SESSION['success'] =
-            'Le trajet a bien été supprimé.';
-    }
-
-    header(
-        'Location: /touche-pas-au-klaxon/public/admin/trajets'
-    );
-
-    exit;
-}
-    /**
-     * Vérifie que l’utilisateur est administrateur.
-     */
-    private function requireAdmin(): void
+    public function agences(): string
     {
-        if (
-            !isset($_SESSION['user'])
-            || $_SESSION['user']['role'] !== 'ADMIN'
-        ) {
-            http_response_code(403);
+        $this->requireAdmin();
 
-            exit('Accès interdit.');
+        $agencesAffichees = [];
+
+        foreach ($this->agenceModel->getAgences() as $agence) {
+            $agencesAffichees[] = [
+                'id_agence' => (int) $agence['id_agence'],
+                'ville' => $this->escape($agence['ville']),
+            ];
         }
+
+        [$messageSucces, $messageErreur] =
+            $this->pullFlashMessages();
+
+        return $this->render(
+            'admin/agences',
+            [
+                'agencesAffichees' => $agencesAffichees,
+                'messageSucces' => $messageSucces,
+                'messageErreur' => $messageErreur,
+            ]
+        );
+    }
+
+    public function storeAgence(): void
+    {
+        $this->requireAdmin();
+
+        $this->saveAgence();
+    }
+
+    public function editAgence(int $id): string
+    {
+        $this->requireAdmin();
+
+        $agence = $this->agenceModel->getAgenceById($id);
+
+        if ($agence === false) {
+            http_response_code(404);
+
+            return 'Agence introuvable.';
+        }
+
+        return $this->render(
+            'admin/editAgence',
+            [
+                'agenceAffichee' => [
+                    'id_agence' =>
+                        (int) $agence['id_agence'],
+
+                    'ville' =>
+                        $this->escape($agence['ville']),
+                ],
+            ]
+        );
+    }
+
+    public function updateAgence(int $id): void
+    {
+        $this->requireAdmin();
+
+        if (
+            $this->agenceModel->getAgenceById($id)
+            === false
+        ) {
+            http_response_code(404);
+
+            exit('Agence introuvable.');
+        }
+
+        $this->saveAgence($id);
+    }
+
+    public function deleteAgence(int $id): void
+    {
+        $this->requireAdmin();
+
+        $agence = $this->agenceModel->getAgenceById($id);
+
+        if ($agence === false) {
+            $this->flash(
+                'error',
+                'Agence introuvable.'
+            );
+        } elseif ($this->agenceModel->isAgenceUsed($id)) {
+            $this->flash(
+                'error',
+                'Cette agence ne peut pas être supprimée '
+                    . 'car elle est utilisée par un trajet.'
+            );
+        } else {
+            $this->agenceModel->deleteAgence($id);
+
+            $this->flash(
+                'success',
+                'L’agence a bien été supprimée.'
+            );
+        }
+
+        $this->redirect('/admin/agences');
+    }
+
+    public function trajets(): string
+    {
+        $this->requireAdmin();
+
+        $trajetsAffiches = $this->formatTrajets(
+            $this->postModel->getAllTrajets()
+        );
+
+        [$messageSucces, $messageErreur] =
+            $this->pullFlashMessages();
+
+        return $this->render(
+            'admin/trajets',
+            [
+                'trajetsAffiches' => $trajetsAffiches,
+                'messageSucces' => $messageSucces,
+                'messageErreur' => $messageErreur,
+            ]
+        );
+    }
+
+    public function deleteTrajet(int $id): void
+    {
+        $this->requireAdmin();
+
+        if ($this->postModel->getTrajetById($id) === false) {
+            $this->flash(
+                'error',
+                'Trajet introuvable.'
+            );
+        } else {
+            $this->postModel->deleteTrajetAdmin($id);
+
+            $this->flash(
+                'success',
+                'Le trajet a bien été supprimé.'
+            );
+        }
+
+        $this->redirect('/admin/trajets');
+    }
+
+    /**
+     * Crée ou modifie une agence.
+     */
+    private function saveAgence(
+        ?int $idAgence = null
+    ): never {
+        $ville = trim($_POST['ville'] ?? '');
+
+        $error = $this->validateVille(
+            $ville,
+            $idAgence
+        );
+
+        if ($error !== null) {
+            $this->flash('error', $error);
+        } elseif ($idAgence === null) {
+            $this->agenceModel->createAgence($ville);
+
+            $this->flash(
+                'success',
+                'L’agence a bien été créée.'
+            );
+        } else {
+            $this->agenceModel->updateAgence(
+                $idAgence,
+                $ville
+            );
+
+            $this->flash(
+                'success',
+                'L’agence a bien été modifiée.'
+            );
+        }
+
+        $this->redirect('/admin/agences');
+    }
+
+    private function validateVille(
+        string $ville,
+        ?int $idAgence = null
+    ): ?string {
+        if ($ville === '') {
+            return 'Le nom de la ville est obligatoire.';
+        }
+
+        if (mb_strlen($ville) > 100) {
+            return 'Le nom de la ville ne peut pas dépasser '
+                . '100 caractères.';
+        }
+
+        $agence =
+            $this->agenceModel->getAgenceByVille($ville);
+
+        if (
+            $agence !== false
+            && (int) $agence['id_agence'] !== $idAgence
+        ) {
+            return 'Une agence utilise déjà ce nom.';
+        }
+
+        return null;
     }
 }

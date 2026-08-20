@@ -6,27 +6,23 @@
 
 <h1>Modifier une agence</h1>
 
-<form
-    action="/touche-pas-au-klaxon/public/admin/agences/<?= $agenceAffichee['id_agence'] ?>/modifier"
-    method="post"
->
-    <div>
-        <label for="ville">Ville</label>
+<?= $this->component('adminNavigation') ?>
 
-        <input
-            type="text"
-            id="ville"
-            name="ville"
-            value="<?= $agenceAffichee['ville'] ?>"
-            required
-        >
-    </div>
+<?= $this->component(
+    'agenceForm',
+    [
+        'action' =>
+            '/touche-pas-au-klaxon/public/admin/agences/'
+            . $agenceAffichee['id_agence']
+            . '/modifier',
 
-    <button type="submit">
-        Enregistrer les modifications
-    </button>
+        'submitLabel' =>
+            'Enregistrer les modifications',
 
-    <a href="/touche-pas-au-klaxon/public/admin/agences">
-        Annuler
-    </a>
-</form>
+        'ville' =>
+            $agenceAffichee['ville'],
+
+        'cancelUrl' =>
+            '/touche-pas-au-klaxon/public/admin/agences',
+    ]
+) ?>
