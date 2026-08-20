@@ -8,13 +8,15 @@
 
 <h1>Liste de tous les trajets</h1>
 
-<?php if ($messageSucces !== null): ?>
-    <p><?= $messageSucces ?></p>
-<?php endif; ?>
+<?= $this->component('adminNavigation') ?>
 
-<?php if ($messageErreur !== null): ?>
-    <p><?= $messageErreur ?></p>
-<?php endif; ?>
+<?= $this->component(
+    'messages',
+    [
+        'success' => $messageSucces,
+        'error' => $messageErreur,
+    ]
+) ?>
 
 <?php if ($trajetsAffiches === []): ?>
     <p>Aucun trajet trouvé.</p>
@@ -33,7 +35,9 @@
         </thead>
 
         <tbody>
-            <?php foreach ($trajetsAffiches as $trajet): ?>
+            <?php foreach (
+                $trajetsAffiches as $trajet
+            ): ?>
                 <tr>
                     <td><?= $trajet['ville_depart'] ?></td>
                     <td><?= $trajet['ville_arrivee'] ?></td>
@@ -64,9 +68,3 @@
         </tbody>
     </table>
 <?php endif; ?>
-
-<p>
-    <a href="/touche-pas-au-klaxon/public/admin">
-        Retour à l’administration
-    </a>
-</p>

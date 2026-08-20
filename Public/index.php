@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
-
 use Buki\Router\Router;
 use Dotenv\Dotenv;
 
-// Chargement du fichier .env situé à la racine
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
+$root = dirname(__DIR__);
+
+require_once $root . '/vendor/autoload.php';
+
+Dotenv::createImmutable($root)->load();
 
 session_start();
 
@@ -18,7 +18,7 @@ $router = new Router([
     'debug' => true,
 
     'paths' => [
-        'controllers' => dirname(__DIR__) . '/App/Controller',
+        'controllers' => $root . '/App/Controller',
     ],
 
     'namespaces' => [
@@ -26,7 +26,6 @@ $router = new Router([
     ],
 ]);
 
-require_once dirname(__DIR__) . '/Router/routeur.php';
+require_once $root . '/Router/routeur.php';
 
 $router->run();
-?>

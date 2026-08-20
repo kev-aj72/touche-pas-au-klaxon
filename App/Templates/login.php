@@ -1,11 +1,28 @@
+<?php
+
+/** @var string|null $error */
+
+?>
+
 <h1>Connexion</h1>
+
+<?= $this->component(
+    'messages',
+    [
+        'error' => $error !== null
+            ? $this->escape($error)
+            : null,
+    ]
+) ?>
 
 <form
     action="/touche-pas-au-klaxon/public/login"
-    method="POST"
+    method="post"
 >
     <div>
-        <label for="email">Adresse email</label>
+        <label for="email">
+            Adresse email
+        </label>
 
         <input
             type="email"
@@ -17,7 +34,9 @@
     </div>
 
     <div>
-        <label for="password">Mot de passe</label>
+        <label for="password">
+            Mot de passe
+        </label>
 
         <input
             type="password"
@@ -31,4 +50,8 @@
     <button type="submit">
         Se connecter
     </button>
+
+    <a href="/touche-pas-au-klaxon/public/">
+        Retour à l’accueil
+    </a>
 </form>

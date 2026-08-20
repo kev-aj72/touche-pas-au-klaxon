@@ -2,94 +2,119 @@
 
 declare(strict_types=1);
 
+use App\Controller\AdminController;
+use App\Controller\HomeController;
+use App\Controller\TrajetController;
+use App\Controller\UserController;
+
+$homeController = HomeController::class;
+$userController = UserController::class;
+$trajetController = TrajetController::class;
+$adminController = AdminController::class;
+
 $router->get(
     '/',
-    'App\Controller\HomeController@index'
+    $homeController . '@index'
 );
 
 $router->get(
     '/login',
-    'App\Controller\UserController@login'
+    $userController . '@login'
 );
 
 $router->post(
     '/login',
-    'App\Controller\UserController@authenticate'
+    $userController . '@authenticate'
 );
 
 $router->post(
     '/logout',
-    'App\Controller\UserController@logout'
+    $userController . '@logout'
 );
 
-$router->get(
-    '/trajets/ajouter',
-    'App\Controller\TrajetController@create'
+$router->group(
+    '/trajets',
+    function ($router) use ($trajetController): void {
+        $router->get(
+            '/ajouter',
+            $trajetController . '@create'
+        );
+
+        $router->post(
+            '/ajouter',
+            $trajetController . '@store'
+        );
+
+        $router->get(
+            '/:id/modifier',
+            $trajetController . '@edit'
+        );
+
+        $router->post(
+            '/:id/modifier',
+            $trajetController . '@update'
+        );
+
+        $router->post(
+            '/:id/supprimer',
+            $trajetController . '@delete'
+        );
+    }
 );
 
-$router->post(
-    '/trajets/ajouter',
-    'App\Controller\TrajetController@store'
-);
-
-$router->get(
-    '/trajets/:id/modifier',
-    'App\Controller\TrajetController@edit'
-);
-
-$router->post(
-    '/trajets/:id/modifier',
-    'App\Controller\TrajetController@update'
-);
-
-$router->post(
-    '/trajets/:id/supprimer',
-    'App\Controller\TrajetController@delete'
-);
-
-$router->get(
+$router->group(
     '/admin',
-    'App\Controller\AdminController@index'
-);
+    function ($router) use ($adminController): void {
+        $router->get(
+            '/',
+            $adminController . '@index'
+        );
 
-$router->get(
-    '/admin/employes',
-    'App\Controller\AdminController@employes'
-);
+        $router->get(
+            '/employes',
+            $adminController . '@employes'
+        );
 
-$router->get(
-    '/admin/agences',
-    'App\Controller\AdminController@agences'
-);
+        $router->group(
+            '/agences',
+            function ($router) use ($adminController): void {
+                $router->get(
+                    '/',
+                    $adminController . '@agences'
+                );
 
-$router->post(
-    '/admin/agences/ajouter',
-    'App\Controller\AdminController@storeAgence'
-);
+                $router->post(
+                    '/ajouter',
+                    $adminController . '@storeAgence'
+                );
 
-$router->get(
-    '/admin/agences/:id/modifier',
-    'App\Controller\AdminController@editAgence'
-);
+                $router->get(
+                    '/:id/modifier',
+                    $adminController . '@editAgence'
+                );
 
-$router->post(
-    '/admin/agences/:id/modifier',
-    'App\Controller\AdminController@updateAgence'
-);
+                $router->post(
+                    '/:id/modifier',
+                    $adminController . '@updateAgence'
+                );
 
-$router->post(
-    '/admin/agences/:id/supprimer',
-    'App\Controller\AdminController@deleteAgence'
-);
+                $router->post(
+                    '/:id/supprimer',
+                    $adminController . '@deleteAgence'
+                );
+            }
+        );
 
-$router->get(
-    '/admin/trajets',
-    'App\Controller\AdminController@trajets'
-);
+        $router->get(
+            '/trajets',
+            $adminController . '@trajets'
+        );
 
-$router->post(
-    '/admin/trajets/:id/supprimer',
-    'App\Controller\AdminController@deleteTrajet'
+        $router->post(
+            '/trajets/:id/supprimer',
+            $adminController . '@deleteTrajet'
+        );
+    }
 );
 
 $router->notFound(
@@ -100,6 +125,7 @@ $router->notFound(
             . '/App/Templates/errors404.php';
 
         $response->setStatusCode(404);
+
         $response->setContent(
             (string) ob_get_clean()
         );
@@ -107,8 +133,3 @@ $router->notFound(
         return $response;
     }
 );
-
-$router->get('/test', function (): string {
-    return 'Le routeur fonctionne';
-});
-?>

@@ -4,131 +4,153 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-require_once __DIR__ . '/../Model/userModel.php';
+use App\Model\UserModel;
+use Core\DefaultController;
 
-class UserController
+class UserController extends DefaultController
 {
-
- private const MAX_LOGIN_ATTEMPTS = 5;
+    private const MAX_LOGIN_ATTEMPTS = 5;
     private const LOGIN_BLOCK_DURATION = 300;
-    /**
-     * Affiche le formulaire de connexion.
-     */
+
+    private UserModel $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = new UserModel();
+    }
+
     public function login(): string
     {
         return $this->renderLogin();
     }
 
-    /**
- * Traite le formulaire de connexion.
- */
-public function authenticate(): string
-{
-    $blockedUntil =
-        (int) ($_SESSION['login_blocked_until'] ?? 0);
-
-    if ($blockedUntil > time()) {
-        return $this->renderLogin(
-            'Trop de tentatives. Réessayez dans 5 minutes.'
-        );
-    }
-
-    if ($blockedUntil !== 0) {
-        unset(
-            $_SESSION['login_attempts'],
-            $_SESSION['login_blocked_until']
-        );
-    }
-
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-
-    if (
-        !filter_var($email, FILTER_VALIDATE_EMAIL)
-        || $password === ''
-    ) {
-        return $this->renderLogin(
-            'Veuillez remplir correctement tous les champs.'
-        );
-    }
-
-    $employe = \getEmployeByEmail($email);
-
-    if (
-        $employe === false
-        || !password_verify(
-            $password,
-            (string) $employe['mot_de_passe']
-        )
-    ) {
-        $tentatives =
-            (int) ($_SESSION['login_attempts'] ?? 0) + 1;
-
-        $_SESSION['login_attempts'] = $tentatives;
-
-        if ($tentatives >= self::MAX_LOGIN_ATTEMPTS) {
-            $_SESSION['login_blocked_until'] =
-                time() + self::LOGIN_BLOCK_DURATION;
-
+    public function authenticate(): string
+    {
+        if ($this->isLoginBlocked()) {
             return $this->renderLogin(
                 'Trop de tentatives. Réessayez dans 5 minutes.'
             );
         }
 
-        return $this->renderLogin(
-            'Adresse email ou mot de passe incorrect.'
-        );
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        if (
+            !filter_var($email, FILTER_VALIDATE_EMAIL)
+            || $password === ''
+        ) {
+            return $this->renderLogin(
+                'Veuillez remplir correctement tous les champs.'
+            );
+        }
+
+        $employe =
+            $this->userModel->getEmployeByEmail($email);
+
+        if (
+            $employe === false
+            || !password_verify(
+                $password,
+                (string) $employe['mot_de_passe']
+            )
+        ) {
+            $isBlocked =
+                $this->registerFailedAttempt();
+
+            $message = $isBlocked
+                ? 'Trop de tentatives. Réessayez dans 5 minutes.'
+                : 'Adresse email ou mot de passe incorrect.';
+
+            return $this->renderLogin($message);
+        }
+
+        $this->resetLoginAttempts();
+
+        session_regenerate_id(true);
+
+        $_SESSION['user'] = [
+            'id_employe' =>
+                (int) $employe['id_employe'],
+
+            'nom' =>
+                $employe['nom'],
+
+            'prenom' =>
+                $employe['prenom'],
+
+            'telephone' =>
+                $employe['telephone'],
+
+            'email' =>
+                $employe['email'],
+
+            'role' =>
+                $employe['role'],
+        ];
+
+        $this->redirect('/');
     }
 
-    unset(
-        $_SESSION['login_attempts'],
-        $_SESSION['login_blocked_until']
-    );
-
-    session_regenerate_id(true);
-
-    $_SESSION['user'] = [
-        'id_employe' => (int) $employe['id_employe'],
-        'nom' => $employe['nom'],
-        'prenom' => $employe['prenom'],
-        'telephone' => $employe['telephone'],
-        'email' => $employe['email'],
-        'role' => $employe['role'],
-    ];
-
-    header(
-        'Location: /touche-pas-au-klaxon/public/'
-    );
-
-    exit;
-}
-
-    /**
-     * Déconnecte l’utilisateur.
-     */
     public function logout(): void
     {
         $_SESSION = [];
 
         session_destroy();
 
-        header(
-            'Location: /touche-pas-au-klaxon/public/login'
-        );
-
-        exit;
+        $this->redirect('/login');
     }
 
-    /**
-     * Charge le template de connexion.
-     */
     private function renderLogin(
         ?string $error = null
     ): string {
-        ob_start();
+        return $this->render(
+            'login',
+            [
+                'error' => $error,
+            ]
+        );
+    }
 
-        require dirname(__DIR__) . '/Templates/login.php';
+    private function isLoginBlocked(): bool
+    {
+        $blockedUntil =
+            (int) ($_SESSION['login_blocked_until'] ?? 0);
 
-        return (string) ob_get_clean();
+        if ($blockedUntil === 0) {
+            return false;
+        }
+
+        if ($blockedUntil <= time()) {
+            $this->resetLoginAttempts();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function registerFailedAttempt(): bool
+    {
+        $attempts =
+            (int) ($_SESSION['login_attempts'] ?? 0) + 1;
+
+        $_SESSION['login_attempts'] = $attempts;
+
+        if ($attempts < self::MAX_LOGIN_ATTEMPTS) {
+            return false;
+        }
+
+        $_SESSION['login_blocked_until'] =
+            time() + self::LOGIN_BLOCK_DURATION;
+
+        return true;
+    }
+
+    private function resetLoginAttempts(): void
+    {
+        unset(
+            $_SESSION['login_attempts'],
+            $_SESSION['login_blocked_until']
+        );
     }
 }
