@@ -1,33 +1,33 @@
 <nav>
     <ul>
         <li>
-            <a href="/touche-pas-au-klaxon/public/admin">
+            <a href="<?= $this->url('/admin') ?>">
                 Tableau de bord
             </a>
         </li>
 
         <li>
-            <a href="/touche-pas-au-klaxon/public/admin/employes">
+            <a href="<?= $this->url('/admin/employes') ?>">
                 Liste des employés
             </a>
         </li>
 
         <li>
-            <a href="/touche-pas-au-klaxon/public/admin/agences">
+            <a href="<?= $this->url('/admin/agences') ?>">
                 Gestion des agences
             </a>
         </li>
 
         <li>
-            <a href="/touche-pas-au-klaxon/public/admin/trajets">
+            <a href="<?= $this->url('/admin/trajets') ?>">
                 Liste de tous les trajets
+            </a>
+        </li>
+
+        <li>
+            <a href="<?= $this->url('/') ?>">
+                Retour à l’accueil
             </a>
         </li>
     </ul>
 </nav>
-
-<p>
-    <a href="/touche-pas-au-klaxon/public/">
-        Retour à l’accueil
-    </a>
-</p>

@@ -4,8 +4,6 @@
     La page que vous recherchez n’existe pas.
 </p>
 
-<p>
-    <a href="/touche-pas-au-klaxon/public/">
-        Retour à l’accueil
-    </a>
-</p>
+<a href="<?= $_ENV['APP_BASE_PATH'] ?>/">
+    Retour à l’accueil
+</a>

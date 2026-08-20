@@ -6,10 +6,42 @@ namespace Core\Traits;
 
 trait TemplateTrait
 {
-    /**
-     * Charge une page complète.
-     */
     protected function render(
+        string $template,
+        array $data = []
+    ): string {
+        $content = $this->renderFile(
+            $template,
+            $data
+        );
+
+        return $this->renderFile(
+            'layout',
+            ['content' => $content]
+        );
+    }
+
+    protected function component(
+        string $component,
+        array $data = []
+    ): string {
+        return $this->renderFile(
+            'components/' . $component,
+            $data
+        );
+    }
+
+    protected function escape(
+        string $value
+    ): string {
+        return htmlspecialchars(
+            $value,
+            ENT_QUOTES,
+            'UTF-8'
+        );
+    }
+
+    private function renderFile(
         string $template,
         array $data = []
     ): string {
@@ -23,30 +55,5 @@ trait TemplateTrait
             . '.php';
 
         return (string) ob_get_clean();
-    }
-
-    /**
-     * Charge un composant réutilisable.
-     */
-    protected function component(
-        string $component,
-        array $data = []
-    ): string {
-        return $this->render(
-            'components/' . $component,
-            $data
-        );
-    }
-
-    /**
-     * Sécurise une valeur affichée.
-     */
-    protected function escape(string $value): string
-    {
-        return htmlspecialchars(
-            $value,
-            ENT_QUOTES,
-            'UTF-8'
-        );
     }
 }

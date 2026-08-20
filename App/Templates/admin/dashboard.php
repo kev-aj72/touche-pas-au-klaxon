@@ -1,3 +1,7 @@
-<h1>Administration</h1>
+<main>
+    <h1>Administration</h1>
 
-<?= $this->component('adminNavigation') ?>
+    <?= $this->component(
+        'adminNavigation'
+    ) ?>
+</main>

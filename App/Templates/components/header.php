@@ -1,32 +1,40 @@
 <?php
 
-/** @var array|null $utilisateurConnecte */
-/** @var string|null $nomUtilisateur */
-
 $utilisateurConnecte =
-    $utilisateurConnecte ?? null;
+    $_SESSION['user'] ?? null;
 
-$nomUtilisateur =
-    $nomUtilisateur ?? null;
+$nomUtilisateur = null;
+
+if ($utilisateurConnecte !== null) {
+    $nomUtilisateur = $this->escape(
+        $utilisateurConnecte['prenom']
+        . ' '
+        . $utilisateurConnecte['nom']
+    );
+}
 
 ?>
 
 <header>
+    <a href="<?= $this->url('/') ?>">
+        Touche pas au klaxon
+    </a>
+
     <?php if ($utilisateurConnecte !== null): ?>
-        <p>Connecté : <?= $nomUtilisateur ?></p>
+        <p>
+            Connecté : <?= $nomUtilisateur ?>
+        </p>
 
         <?php if (
             $utilisateurConnecte['role'] === 'ADMIN'
         ): ?>
-            <p>
-                <a href="/touche-pas-au-klaxon/public/admin">
-                    Administration
-                </a>
-            </p>
+            <a href="<?= $this->url('/admin') ?>">
+                Administration
+            </a>
         <?php endif; ?>
 
         <form
-            action="/touche-pas-au-klaxon/public/logout"
+            action="<?= $this->url('/logout') ?>"
             method="post"
         >
             <button type="submit">
@@ -34,7 +42,7 @@ $nomUtilisateur =
             </button>
         </form>
     <?php else: ?>
-        <a href="/touche-pas-au-klaxon/public/login">
+        <a href="<?= $this->url('/login') ?>">
             Se connecter
         </a>
     <?php endif; ?>

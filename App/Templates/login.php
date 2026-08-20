@@ -4,54 +4,57 @@
 
 ?>
 
-<h1>Connexion</h1>
+<main>
+    <h1>Connexion</h1>
 
-<?= $this->component(
-    'messages',
-    [
-        'error' => $error !== null
-            ? $this->escape($error)
-            : null,
-    ]
-) ?>
+    <?= $this->component(
+        'messages',
+        [
+            'error' => $error,
+        ]
+    ) ?>
 
-<form
-    action="/touche-pas-au-klaxon/public/login"
-    method="post"
->
-    <div>
-        <label for="email">
-            Adresse email
-        </label>
+    <form
+        action="<?= $this->url('/login') ?>"
+        method="post"
+    >
+        <div>
+            <label for="email">
+                Adresse email
+            </label>
 
-        <input
-            type="email"
-            id="email"
-            name="email"
-            autocomplete="email"
-            required
-        >
-    </div>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                required
+            >
+        </div>
 
-    <div>
-        <label for="password">
-            Mot de passe
-        </label>
+        <div>
+            <label for="password">
+                Mot de passe
+            </label>
 
-        <input
-            type="password"
-            id="password"
-            name="password"
-            autocomplete="current-password"
-            required
-        >
-    </div>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="current-password"
+                required
+            >
+        </div>
 
-    <button type="submit">
-        Se connecter
-    </button>
+        <button type="submit">
+            Se connecter
+        </button>
+    </form>
 
-    <a href="/touche-pas-au-klaxon/public/">
-        Retour à l’accueil
-    </a>
-</form>
+    <p>
+        <a href="<?= $this->url('/') ?>">
+            Retour à l’accueil
+        </a>
+    </p>
+</main>
+
