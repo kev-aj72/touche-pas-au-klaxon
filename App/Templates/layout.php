@@ -24,11 +24,22 @@
     >
 </head>
 
-<body>
+<body
+    class="bg-light text-dark min-vh-100
+        d-flex flex-column"
+>
     <?= $this->component('header') ?>
 
-    <?= $content ?>
+    <div class="container flex-grow-1">
+        <?= $content ?>
+    </div>
 
     <?= $this->component('footer') ?>
+
+    <script
+        src="<?= $this->url(
+            '/assets/js/bootstrap.bundle.min.js'
+        ) ?>"
+    ></script>
 </body>
 </html>

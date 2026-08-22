@@ -4,12 +4,10 @@
 
 ?>
 
-<main>
-    <h1>Modifier une agence</h1>
-
-    <?= $this->component(
-        'adminNavigation'
-    ) ?>
+<main class="pb-4">
+    <h1 class="h2 mb-4">
+        Modifier une agence
+    </h1>
 
     <?= $this->component(
         'agenceForm',

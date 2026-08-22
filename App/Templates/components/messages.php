@@ -9,9 +9,19 @@ $error = $error ?? null;
 ?>
 
 <?php if ($success !== null): ?>
-    <p><?= $success ?></p>
+    <div
+        class="alert alert-success"
+        role="alert"
+    >
+        <?= $success ?>
+    </div>
 <?php endif; ?>
 
 <?php if ($error !== null): ?>
-    <p><?= $error ?></p>
+    <div
+        class="alert alert-danger"
+        role="alert"
+    >
+        <?= $error ?>
+    </div>
 <?php endif; ?>

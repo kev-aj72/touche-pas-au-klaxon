@@ -6,34 +6,45 @@
 
 ?>
 
-<main>
-    <h1>Proposer un trajet</h1>
+<main class="pb-4">
+    <h1 class="h2 mb-4">
+        Proposer un trajet
+    </h1>
 
-    <section>
-        <h2>Contact du trajet</h2>
+    <section class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h5 card-title mb-3">
+                Contact du trajet
+            </h2>
 
-        <p>
-            Nom :
-            <?= $this->escape(
-                $auteur['prenom']
-                . ' '
-                . $auteur['nom']
-            ) ?>
-        </p>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Nom :</strong>
 
-        <p>
-            Téléphone :
-            <?= $this->escape(
-                $auteur['telephone']
-            ) ?>
-        </p>
+                    <?= $this->escape(
+                        $auteur['prenom']
+                        . ' '
+                        . $auteur['nom']
+                    ) ?>
+                </div>
 
-        <p>
-            Email :
-            <?= $this->escape(
-                $auteur['email']
-            ) ?>
-        </p>
+                <div class="col-md-4">
+                    <strong>Téléphone :</strong>
+
+                    <?= $this->escape(
+                        $auteur['telephone']
+                    ) ?>
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Email :</strong>
+
+                    <?= $this->escape(
+                        $auteur['email']
+                    ) ?>
+                </div>
+            </div>
+        </div>
     </section>
 
     <?= $this->component(
