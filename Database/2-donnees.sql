@@ -23,14 +23,14 @@ INSERT INTO `agences` (`ville`) VALUES
     ('Rennes'),
     ('Reims');
 
-    -- ============================================================
+-- ==============================================================
 
 --
 -- Insertion des données de la table `employes`
 --
 
 INSERT INTO `employes` (`nom`,`prenom`,`telephone`,`email`,`mot_de_passe`,`role`) VALUES
-    ('Doe','John','0600000000','john.doe@email.fr''$2y$10$T7jh/WYIcGnX6XKmwlDvE.5Xcp0C3NZHxldH0pHveE9/5/829VgWe','ADMIN'),
+    ('Doe','John','0600000000','john.doe@email.fr','$2y$10$T7jh/WYIcGnX6XKmwlDvE.5Xcp0C3NZHxldH0pHveE9/5/829VgWe','ADMIN'),
     ('Martin','Alexandre','0612345678','alexandre.martin@email.fr','$2y$10$.raKjVI2iXrtMUIFPASFYOf2oQsjMb2ZCtlj7XqnR85ZivzYF6RWa','USER'),
     ('Dubois','Sophie','0698765432','sophie.dubois@email.fr','$2y$10$8AinQ2UOImRALzWIOxIoNOCHV.ylol.19M6IYSU/bpAISxl2mN3nG','USER'),
     ('Bernard','Julien','0622446688','julien.bernard@email.fr','$2y$10$8AinQ2UOImRALzWIOxIoNOCHV.ylol.19M6IYSU/bpAISxl2mN3nG','USER'),
@@ -51,3 +51,17 @@ INSERT INTO `employes` (`nom`,`prenom`,`telephone`,`email`,`mot_de_passe`,`role`
     ('Lambert','Hugo','0611223366','hugo.lambert@email.fr','$2y$10$8AinQ2UOImRALzWIOxIoNOCHV.ylol.19M6IYSU/bpAISxl2mN3nG','USER'),
     ('Masson','Julie','0733445566','julie.masson@email.fr','$2y$10$8AinQ2UOImRALzWIOxIoNOCHV.ylol.19M6IYSU/bpAISxl2mN3nG','USER'),
     ('Henry','Arthur','0666554433','arthur.henry@email.fr','$2y$10$8AinQ2UOImRALzWIOxIoNOCHV.ylol.19M6IYSU/bpAISxl2mN3nG','USER');
+
+
+-- ==============================================================
+--
+-- Insertion des données de la table `trajets`
+--
+
+INSERT INTO `trajets` (`date_heure_depart`,`date_heure_arrivee`,`nombre_places_total`,`nombre_places_disponibles`,`id_employe`,`id_agence_depart`,`id_agence_arrivee`) VALUES
+    ('2026-09-01 08:00:00','2026-09-01 12:30:00',4,3,1,1,2 ),
+    ('2026-09-02 09:30:00','2026-09-02 14:00:00',3,1,2,2,3),
+    ('2026-09-03 07:00:00','2026-09-03 10:00:00',5,4,3,6,1),
+    ('2026-09-04 13:00:00','2026-09-04 15:00:00',4,2,4,9,4),
+    ('2026-09-05 10:00:00','2026-09-05 12:00:00',2,2,5,10,12),
+    ('2026-09-06 14:00:00','2026-09-06 15:30:00',4,1,6,11,6);

@@ -3,6 +3,9 @@
 /** @var array $trajet */
 /** @var array|null $utilisateurConnecte */
 
+$idTrajet = (int) $trajet['id_trajet'];
+$idModal = 'detailsTrajet' . $idTrajet;
+
 ?>
 
 <tr>
@@ -14,29 +17,22 @@
 
     <?php if ($utilisateurConnecte !== null): ?>
         <td>
-            <details>
-                <summary>Voir</summary>
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#<?= $idModal ?>"
+            >
+                Voir
+            </button>
 
-                <p>
-                    Contact :
-                    <?= $trajet['contact'] ?>
-                </p>
-
-                <p>
-                    Téléphone :
-                    <?= $trajet['telephone'] ?>
-                </p>
-
-                <p>
-                    Email :
-                    <?= $trajet['email'] ?>
-                </p>
-
-                <p>
-                    Nombre total de places :
-                    <?= $trajet['places_total'] ?>
-                </p>
-            </details>
+            <?= $this->component(
+                'trajetModal',
+                [
+                    'trajet' => $trajet,
+                    'idModal' => $idModal,
+                ]
+            ) ?>
         </td>
 
         <td>
@@ -44,9 +40,10 @@
                 <a
                     href="<?= $this->url(
                         '/trajets/'
-                        . $trajet['id_trajet']
+                        . $idTrajet
                         . '/modifier'
                     ) ?>"
+                    class="btn btn-sm btn-outline-primary"
                 >
                     Modifier
                 </a>
@@ -54,18 +51,24 @@
                 <form
                     action="<?= $this->url(
                         '/trajets/'
-                        . $trajet['id_trajet']
+                        . $idTrajet
                         . '/supprimer'
                     ) ?>"
                     method="post"
+                    class="d-inline"
                     onsubmit="return confirm(
                         'Supprimer ce trajet ?'
                     );"
                 >
-                    <button type="submit">
+                    <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                    >
                         Supprimer
                     </button>
                 </form>
+            <?php else: ?>
+                <span class="text-muted">—</span>
             <?php endif; ?>
         </td>
     <?php endif; ?>

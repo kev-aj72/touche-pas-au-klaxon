@@ -119,15 +119,13 @@ $router->group(
 
 $router->notFound(
     function ($request, $response) {
-        ob_start();
-
-        require dirname(__DIR__)
-            . '/App/Templates/errors404.php';
+        $controller =
+            new \App\Controller\ErrorController();
 
         $response->setStatusCode(404);
 
         $response->setContent(
-            (string) ob_get_clean()
+            $controller->index()
         );
 
         return $response;

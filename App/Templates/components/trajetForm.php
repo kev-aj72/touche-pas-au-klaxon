@@ -33,116 +33,151 @@ $nombrePlaces =
 <form
     action="<?= $this->escape($action) ?>"
     method="post"
+    class="card shadow-sm p-4"
 >
-    <div>
-        <label for="agence_depart">
-            Agence de départ
-        </label>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label
+                for="agence_depart"
+                class="form-label fw-semibold"
+            >
+                Agence de départ
+            </label>
 
-        <select
-            id="agence_depart"
-            name="id_agence_depart"
-            required
-        >
-            <option value="">
-                Choisir une agence
-            </option>
-
-            <?php foreach ($agences as $agence): ?>
-                <option
-                    value="<?= (int) $agence['id_agence'] ?>"
-                    <?= (int) $agence['id_agence']
-                        === $idAgenceDepart
-                        ? 'selected'
-                        : '' ?>
-                >
-                    <?= $this->escape(
-                        $agence['ville']
-                    ) ?>
+            <select
+                id="agence_depart"
+                name="id_agence_depart"
+                class="form-select"
+                required
+            >
+                <option value="">
+                    Choisir une agence
                 </option>
-            <?php endforeach; ?>
-        </select>
-    </div>
 
-    <div>
-        <label for="agence_arrivee">
-            Agence d’arrivée
-        </label>
+                <?php foreach ($agences as $agence): ?>
+                    <option
+                        value="<?= (int) $agence[
+                            'id_agence'
+                        ] ?>"
+                        <?= (int) $agence['id_agence']
+                            === $idAgenceDepart
+                            ? 'selected'
+                            : '' ?>
+                    >
+                        <?= $this->escape(
+                            $agence['ville']
+                        ) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-        <select
-            id="agence_arrivee"
-            name="id_agence_arrivee"
-            required
-        >
-            <option value="">
-                Choisir une agence
-            </option>
+        <div class="col-md-6">
+            <label
+                for="agence_arrivee"
+                class="form-label fw-semibold"
+            >
+                Agence d’arrivée
+            </label>
 
-            <?php foreach ($agences as $agence): ?>
-                <option
-                    value="<?= (int) $agence['id_agence'] ?>"
-                    <?= (int) $agence['id_agence']
-                        === $idAgenceArrivee
-                        ? 'selected'
-                        : '' ?>
-                >
-                    <?= $this->escape(
-                        $agence['ville']
-                    ) ?>
+            <select
+                id="agence_arrivee"
+                name="id_agence_arrivee"
+                class="form-select"
+                required
+            >
+                <option value="">
+                    Choisir une agence
                 </option>
-            <?php endforeach; ?>
-        </select>
+
+                <?php foreach ($agences as $agence): ?>
+                    <option
+                        value="<?= (int) $agence[
+                            'id_agence'
+                        ] ?>"
+                        <?= (int) $agence['id_agence']
+                            === $idAgenceArrivee
+                            ? 'selected'
+                            : '' ?>
+                    >
+                        <?= $this->escape(
+                            $agence['ville']
+                        ) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label
+                for="date_depart"
+                class="form-label fw-semibold"
+            >
+                Date et heure de départ
+            </label>
+
+            <input
+                type="datetime-local"
+                id="date_depart"
+                name="date_heure_depart"
+                class="form-control"
+                value="<?= $dateDepart ?>"
+                required
+            >
+        </div>
+
+        <div class="col-md-6">
+            <label
+                for="date_arrivee"
+                class="form-label fw-semibold"
+            >
+                Date et heure d’arrivée
+            </label>
+
+            <input
+                type="datetime-local"
+                id="date_arrivee"
+                name="date_heure_arrivee"
+                class="form-control"
+                value="<?= $dateArrivee ?>"
+                required
+            >
+        </div>
+
+        <div class="col-md-4">
+            <label
+                for="nombre_places"
+                class="form-label fw-semibold"
+            >
+                Nombre de places
+            </label>
+
+            <input
+                type="number"
+                id="nombre_places"
+                name="nombre_places_total"
+                class="form-control"
+                min="1"
+                max="255"
+                value="<?= $nombrePlaces ?>"
+                required
+            >
+        </div>
     </div>
 
-    <div>
-        <label for="date_depart">
-            Date et heure de départ
-        </label>
-
-        <input
-            type="datetime-local"
-            id="date_depart"
-            name="date_heure_depart"
-            value="<?= $dateDepart ?>"
-            required
+    <div class="d-flex gap-2 mt-4">
+        <button
+            type="submit"
+            class="btn btn-primary"
         >
-    </div>
+            <?= $this->escape($submitLabel) ?>
+        </button>
 
-    <div>
-        <label for="date_arrivee">
-            Date et heure d’arrivée
-        </label>
-
-        <input
-            type="datetime-local"
-            id="date_arrivee"
-            name="date_heure_arrivee"
-            value="<?= $dateArrivee ?>"
-            required
+        <a
+            href="<?= $this->url('/') ?>"
+            class="btn btn-outline-secondary"
         >
+            Annuler
+        </a>
     </div>
-
-    <div>
-        <label for="nombre_places">
-            Nombre de places
-        </label>
-
-        <input
-            type="number"
-            id="nombre_places"
-            name="nombre_places_total"
-            min="1"
-            max="255"
-            value="<?= $nombrePlaces ?>"
-            required
-        >
-    </div>
-
-    <button type="submit">
-        <?= $this->escape($submitLabel) ?>
-    </button>
-
-    <a href="<?= $this->url('/') ?>">
-        Annuler
-    </a>
 </form>

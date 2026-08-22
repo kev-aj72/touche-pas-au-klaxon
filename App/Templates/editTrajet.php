@@ -5,8 +5,10 @@
 
 ?>
 
-<main>
-    <h1>Modifier le trajet</h1>
+<main class="pb-4">
+    <h1 class="h2 mb-4">
+        Modifier le trajet
+    </h1>
 
     <?= $this->component(
         'trajetForm',
