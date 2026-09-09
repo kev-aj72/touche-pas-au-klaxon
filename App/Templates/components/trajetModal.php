@@ -10,7 +10,7 @@
 
 ?>
 
-<div class="modal fade text-start" id="<?php echo $this->escape($idModal); ?>" tabindex="-1" aria-labelledby="<?php echo $this->escape($idModal . 'Titre');?> aria-hidden="true">
+<div class="modal fade text-start" id="<?php echo $this->escape($idModal); ?>" tabindex="-1" aria-labelledby="<?php echo $this->escape($idModal . 'Titre');?>" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <!-- En-tête de la fenêtre modale -->
