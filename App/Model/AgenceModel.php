@@ -93,3 +93,4 @@ class AgenceModel extends DefaultModel {
             ['id_agence' => $idAgence,]);
     }
 }
+?>

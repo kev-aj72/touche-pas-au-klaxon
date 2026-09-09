@@ -1,117 +1,56 @@
 <?php
 
-/** @var array $agencesAffichees */
-/** @var string|null $messageSucces */
-/** @var string|null $messageErreur */
+/**
+ * Template permettant à l’administrateur
+ * de gérer la liste des agences.
+ */
 
+/** @var array $agencesAffichees Liste des agences. */
+/** @var string|null $messageSucces Message de réussite. */
+/** @var string|null $messageErreur Message d’erreur. */
 ?>
 
 <main class="pb-4">
-    <h1 class="h2 mb-4">
-        Gestion des agences
-    </h1>
+    <h1 class="h2 mb-4">Gestion des agences</h1>
+    <!-- Affichage des messages de réussite ou d’erreur -->
+    <?php echo $this->component('messages',['success' => $messageSucces, 'error' => $messageErreur,]);?>
 
-    <?= $this->component(
-        'messages',
-        [
-            'success' => $messageSucces,
-            'error' => $messageErreur,
-        ]
-    ) ?>
-
+    <!-- Formulaire permettant de créer une agence -->
     <section class="mb-5">
-        <h2 class="h4 mb-3">
-            Ajouter une agence
-        </h2>
-
-        <?= $this->component(
-            'agenceForm',
-            [
-                'action' =>
-                    $this->url(
-                        '/admin/agences/ajouter'
-                    ),
-
-                'submitLabel' =>
-                    'Ajouter l’agence',
-
-                'agence' =>
-                    null,
-            ]
-        ) ?>
+        <h2 class="h4 mb-3">Ajouter une agence</h2>
+        <?php echo $this->component('agenceForm',['action' => $this->url('/admin/agences/ajouter'),
+                                    'submitLabel' => 'Ajouter l’agence', 'agence' => null,]);?>
     </section>
 
+    <!-- Liste des agences existantes -->
     <section>
-        <h2 class="h4 mb-3">
-            Liste des agences
-        </h2>
-
+        <h2 class="h4 mb-3">Liste des agences</h2>
         <?php if ($agencesAffichees === []): ?>
             <p>Aucune agence trouvée.</p>
         <?php else: ?>
-            <div
-                class="table-responsive rounded-4
-                    overflow-hidden"
-            >
-                <table
-                    class="table table-striped table-hover
-                        align-middle mb-0"
-                >
+            <div class="table-responsive rounded-4 overflow-hidden">
+                <table class="table table-striped table-hover align-middle mb-0">
                     <thead class="table-dark">
                         <tr>
                             <th>Ville</th>
-                            <th class="text-end">
-                                Actions
-                            </th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        <?php foreach (
-                            $agencesAffichees as $agence
-                        ): ?>
+                        <!-- Création d’une ligne pour chaque agence -->
+                        <?php foreach ($agencesAffichees as $agence): ?>
                             <tr>
-                                <td>
-                                    <?= $agence['ville'] ?>
-                                </td>
-
+                                <td><?php echo $this->escape($agence['ville']);?></td>
                                 <td class="text-end">
-                                    <a
-                                        href="<?= $this->url(
-                                            '/admin/agences/'
-                                            . $agence[
-                                                'id_agence'
-                                            ]
-                                            . '/modifier'
-                                        ) ?>"
-                                        class="btn btn-sm
-                                            btn-outline-primary"
-                                    >
-                                        Modifier
-                                    </a>
+                                    <!-- Accès au formulaire de modification -->
+                                    <a href="<?php echo $this->url('/admin/agences/'. (int) $agence['id_agence']. '/modifier');?>"
+                                     class="btn btn-sm btn-outline-primary"> Modifier</a>
 
-                                    <form
-                                        action="<?= $this->url(
-                                            '/admin/agences/'
-                                            . $agence[
-                                                'id_agence'
-                                            ]
-                                            . '/supprimer'
-                                        ) ?>"
-                                        method="post"
-                                        class="d-inline"
-                                        onsubmit="return confirm(
-                                            'Supprimer cette agence ?'
-                                        );"
-                                    >
-                                    <?= $this->csrfField() ?>
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm
-                                                btn-outline-danger"
-                                        >
-                                            Supprimer
-                                        </button>
+                                    <!-- Suppression protégée par un jeton CSRF -->
+                                    <form action="<?php echo $this->url('/admin/agences/'. (int) $agence['id_agence']. '/supprimer');?>" 
+                                          method="post" class="d-inline" onsubmit="return confirm('Supprimer cette agence ?');">
+                                        <?php echo $this->csrfField();?>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
                                     </form>
                                 </td>
                             </tr>

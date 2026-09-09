@@ -60,3 +60,4 @@ trait TemplateTrait
         return (string) ob_get_clean();
     }
 }
+?>

@@ -1,35 +1,27 @@
 <?php
 
-/** @var array $trajetsAffiches */
-/** @var string|null $messageSucces */
-/** @var string|null $messageErreur */
+/**
+ * Template affichant tous les trajets
+ * dans l’espace administrateur.
+ */
 
+/** @var array $trajetsAffiches Liste complète des trajets. */
+/** @var string|null $messageSucces Message de réussite. */
+/** @var string|null $messageErreur Message d’erreur. */
 ?>
 
 <main class="pb-4">
-    <h1 class="h2 mb-4">
-        Liste de tous les trajets
-    </h1>
+    <h1 class="h2 mb-4">Liste de tous les trajets</h1>
+    <!-- Affichage des messages de réussite ou d’erreur -->
+    <?php echo $this->component('messages',['success' => $messageSucces, 'error' => $messageErreur,]);?>
 
-    <?= $this->component(
-        'messages',
-        [
-            'success' => $messageSucces,
-            'error' => $messageErreur,
-        ]
-    ) ?>
-
+    <!-- Message affiché lorsque la liste est vide -->
     <?php if ($trajetsAffiches === []): ?>
         <p>Aucun trajet trouvé.</p>
     <?php else: ?>
-        <div
-            class="table-responsive rounded-4
-                overflow-hidden"
-        >
-            <table
-                class="table table-striped table-hover
-                    align-middle text-center mb-0"
-            >
+        <!-- Tableau de tous les trajets -->
+        <div class="table-responsive rounded-4 overflow-hidden">
+            <table class="table table-striped table-hover align-middle text-center mb-0">
                 <thead class="table-dark">
                     <tr>
                         <th>Départ</th>
@@ -44,104 +36,39 @@
                 </thead>
 
                 <tbody>
-                    <?php foreach (
-                        $trajetsAffiches as $trajet
-                    ): ?>
+                    <!-- Création d’une ligne pour chaque trajet -->
+                    <?php foreach ($trajetsAffiches as $trajet): ?>
                         <?php
-
-                        $idTrajet =
-                            (int) $trajet['id_trajet'];
-
-                        $idModal =
-                            'detailsTrajetAdmin'
-                            . $idTrajet;
-
+                        /*
+                         * Création d’un identifiant unique
+                         * pour la fenêtre modale du trajet.
+                         */
+                        $idTrajet = (int) $trajet['id_trajet'];
+                        $idModal = 'detailsTrajetAdmin'. $idTrajet;
                         ?>
 
                         <tr>
+                            <td><?php echo $this->escape($trajet['ville_depart']);?></td>
+                            <td><?php echo $this->escape($trajet['ville_arrivee']);?></td>
+                            <td><?php echo $this->escape($trajet['date_depart']);?></td>
+                            <td><?php echo $this->escape($trajet['date_arrivee']);?></td>
+                            <td><?php echo (int) $trajet['places_disponibles'];?>/<?php echo (int) $trajet['places_total'];?></td>
+                            <td><?php echo $this->escape($trajet['contact']);?></td>
+
+                            <!-- Ouverture des détails du trajet -->
                             <td>
-                                <?= $trajet[
-                                    'ville_depart'
-                                ] ?>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#<?php echo $idModal;?>">Voir</button>
+                                <?php echo $this->component('trajetModal',['trajet' => $trajet, 'idModal' => $idModal,]);?>
                             </td>
 
+                            <!-- Suppression autorisée à l’administrateur -->
                             <td>
-                                <?= $trajet[
-                                    'ville_arrivee'
-                                ] ?>
-                            </td>
+                                <form action="<?php echo $this->url('/admin/trajets/'. $idTrajet. '/supprimer');?>" 
+                                      method="post" class="d-inline" onsubmit="return confirm('Supprimer ce trajet ?');">
+                                    <!-- Protection contre les attaques CSRF -->
+                                    <?php echo $this->csrfField();?>
 
-                            <td>
-                                <?= $trajet[
-                                    'date_depart'
-                                ] ?>
-                            </td>
-
-                            <td>
-                                <?= $trajet[
-                                    'date_arrivee'
-                                ] ?>
-                            </td>
-
-                            <td>
-                                <?= $trajet[
-                                    'places_disponibles'
-                                ] ?>
-                                /
-                                <?= $trajet[
-                                    'places_total'
-                                ] ?>
-                            </td>
-
-                            <td>
-                                <?= $trajet['contact'] ?>
-                            </td>
-
-                            <td>
-                                <button
-                                    type="button"
-                                    class="btn btn-sm
-                                        btn-outline-primary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#<?= $idModal ?>"
-                                >
-                                    Voir
-                                </button>
-
-                                <?= $this->component(
-                                    'trajetModal',
-                                    [
-                                        'trajet' =>
-                                            $trajet,
-
-                                        'idModal' =>
-                                            $idModal,
-                                    ]
-                                ) ?>
-                            </td>
-
-                            <td>
-                                <form
-                                    action="<?= $this->url(
-                                        '/admin/trajets/'
-                                        . $idTrajet
-                                        . '/supprimer'
-                                    ) ?>"
-                                    method="post"
-                                    class="d-inline"
-                                    onsubmit="return confirm(
-                                        'Supprimer ce trajet ?'
-                                    );"
-                                >
-                                    <?= $this->csrfField() ?>
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-sm
-                                            btn-outline-danger"
-                                    >
-                                        Supprimer
-                                    </button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
                                 </form>
                             </td>
                         </tr>

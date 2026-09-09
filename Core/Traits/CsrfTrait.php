@@ -63,3 +63,4 @@ trait CsrfTrait {
      */
     abstract protected function escape(string $value): string;
 }
+?>

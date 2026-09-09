@@ -162,3 +162,4 @@ class UserController extends DefaultController {
               $_SESSION['login_blocked_until']);
     }
 }
+?>

@@ -58,3 +58,4 @@ abstract class DefaultModel {
         return $query->execute($parameters);
     }
 }
+?>

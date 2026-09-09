@@ -28,3 +28,4 @@ $router = new Router(
 require_once $root . '/Router/routeur.php';
 
 $router->run();
+?>

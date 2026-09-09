@@ -74,3 +74,4 @@ $router->notFound(
         return $response;
     }
 );
+?>

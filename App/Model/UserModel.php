@@ -35,3 +35,4 @@ class UserModel extends DefaultModel{
         return $this->findAll('SELECT id_employe, nom, prenom, telephone, email, role FROM employes ORDER BY nom ASC, prenom ASC');
     }
 }
+?>
