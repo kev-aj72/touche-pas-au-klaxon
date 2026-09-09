@@ -13,6 +13,8 @@ $ville = $agence['ville'] ?? '';
     method="post"
     class="card shadow-sm p-4"
 >
+
+<?= $this->csrfField() ?>
     <div class="row align-items-end g-3">
         <div class="col-md-6">
             <label

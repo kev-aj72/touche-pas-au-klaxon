@@ -9,7 +9,8 @@ use Core\DefaultModel;
 class PostModel extends DefaultModel
 {
     /**
-     * Partie commune aux requêtes qui récupèrent les trajets.
+     * Partie commune aux requêtes qui récupèrent
+     * les trajets.
      */
     private const TRAJET_SELECT = <<<'SQL'
         SELECT
@@ -44,7 +45,8 @@ class PostModel extends DefaultModel
         SQL;
 
     /**
-     * Récupère les trajets futurs avec des places disponibles.
+     * Récupère les trajets futurs possédant
+     * encore des places disponibles.
      */
     public function getTrajets(): array
     {
@@ -57,7 +59,8 @@ class PostModel extends DefaultModel
     }
 
     /**
-     * Récupère tous les trajets pour l’administration.
+     * Récupère tous les trajets pour
+     * l’administration.
      */
     public function getAllTrajets(): array
     {
@@ -76,7 +79,8 @@ class PostModel extends DefaultModel
         int $idAgenceArrivee,
         string $dateDepart,
         string $dateArrivee,
-        int $nombrePlaces
+        int $nombrePlacesTotal,
+        int $nombrePlacesDisponibles
     ): bool {
         return $this->executeQuery(
             'INSERT INTO trajets (
@@ -97,19 +101,33 @@ class PostModel extends DefaultModel
                 :agence_arrivee
             )',
             [
-                'date_depart' => $dateDepart,
-                'date_arrivee' => $dateArrivee,
-                'places_total' => $nombrePlaces,
-                'places_disponibles' => $nombrePlaces,
-                'id_employe' => $idEmploye,
-                'agence_depart' => $idAgenceDepart,
-                'agence_arrivee' => $idAgenceArrivee,
+                'date_depart' =>
+                    $dateDepart,
+
+                'date_arrivee' =>
+                    $dateArrivee,
+
+                'places_total' =>
+                    $nombrePlacesTotal,
+
+                'places_disponibles' =>
+                    $nombrePlacesDisponibles,
+
+                'id_employe' =>
+                    $idEmploye,
+
+                'agence_depart' =>
+                    $idAgenceDepart,
+
+                'agence_arrivee' =>
+                    $idAgenceArrivee,
             ]
         );
     }
 
     /**
-     * Récupère un trajet appartenant à un employé.
+     * Récupère un trajet appartenant
+     * à un employé.
      */
     public function getTrajetByIdAndEmploye(
         int $idTrajet,
@@ -121,14 +139,18 @@ class PostModel extends DefaultModel
             WHERE id_trajet = :id_trajet
             AND id_employe = :id_employe',
             [
-                'id_trajet' => $idTrajet,
-                'id_employe' => $idEmploye,
+                'id_trajet' =>
+                    $idTrajet,
+
+                'id_employe' =>
+                    $idEmploye,
             ]
         );
     }
 
     /**
-     * Modifie un trajet appartenant à un employé.
+     * Modifie un trajet appartenant
+     * à un employé.
      */
     public function updateTrajet(
         int $idTrajet,
@@ -137,35 +159,63 @@ class PostModel extends DefaultModel
         int $idAgenceArrivee,
         string $dateDepart,
         string $dateArrivee,
-        int $nombrePlaces
+        int $nombrePlacesTotal,
+        int $nombrePlacesDisponibles
     ): bool {
         return $this->executeQuery(
             'UPDATE trajets
             SET
-                id_agence_depart = :agence_depart,
-                id_agence_arrivee = :agence_arrivee,
-                date_heure_depart = :date_depart,
-                date_heure_arrivee = :date_arrivee,
-                nombre_places_total = :places_total,
+                id_agence_depart =
+                    :agence_depart,
+
+                id_agence_arrivee =
+                    :agence_arrivee,
+
+                date_heure_depart =
+                    :date_depart,
+
+                date_heure_arrivee =
+                    :date_arrivee,
+
+                nombre_places_total =
+                    :places_total,
+
                 nombre_places_disponibles =
                     :places_disponibles
+
             WHERE id_trajet = :id_trajet
             AND id_employe = :id_employe',
             [
-                'agence_depart' => $idAgenceDepart,
-                'agence_arrivee' => $idAgenceArrivee,
-                'date_depart' => $dateDepart,
-                'date_arrivee' => $dateArrivee,
-                'places_total' => $nombrePlaces,
-                'places_disponibles' => $nombrePlaces,
-                'id_trajet' => $idTrajet,
-                'id_employe' => $idEmploye,
+                'agence_depart' =>
+                    $idAgenceDepart,
+
+                'agence_arrivee' =>
+                    $idAgenceArrivee,
+
+                'date_depart' =>
+                    $dateDepart,
+
+                'date_arrivee' =>
+                    $dateArrivee,
+
+                'places_total' =>
+                    $nombrePlacesTotal,
+
+                'places_disponibles' =>
+                    $nombrePlacesDisponibles,
+
+                'id_trajet' =>
+                    $idTrajet,
+
+                'id_employe' =>
+                    $idEmploye,
             ]
         );
     }
 
     /**
-     * Supprime un trajet appartenant à un employé.
+     * Supprime un trajet appartenant
+     * à un employé.
      */
     public function deleteTrajet(
         int $idTrajet,
@@ -176,8 +226,11 @@ class PostModel extends DefaultModel
             WHERE id_trajet = :id_trajet
             AND id_employe = :id_employe',
             [
-                'id_trajet' => $idTrajet,
-                'id_employe' => $idEmploye,
+                'id_trajet' =>
+                    $idTrajet,
+
+                'id_employe' =>
+                    $idEmploye,
             ]
         );
     }
@@ -193,13 +246,15 @@ class PostModel extends DefaultModel
             FROM trajets
             WHERE id_trajet = :id_trajet',
             [
-                'id_trajet' => $idTrajet,
+                'id_trajet' =>
+                    $idTrajet,
             ]
         );
     }
 
     /**
-     * Supprime un trajet sans vérifier son auteur.
+     * Supprime un trajet sans vérifier
+     * son auteur.
      */
     public function deleteTrajetAdmin(
         int $idTrajet
@@ -208,7 +263,8 @@ class PostModel extends DefaultModel
             'DELETE FROM trajets
             WHERE id_trajet = :id_trajet',
             [
-                'id_trajet' => $idTrajet,
+                'id_trajet' =>
+                    $idTrajet,
             ]
         );
     }

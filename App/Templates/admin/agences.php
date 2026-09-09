@@ -104,6 +104,7 @@
                                             'Supprimer cette agence ?'
                                         );"
                                     >
+                                    <?= $this->csrfField() ?>
                                         <button
                                             type="submit"
                                             class="btn btn-sm

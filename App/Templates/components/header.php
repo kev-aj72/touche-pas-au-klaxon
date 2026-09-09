@@ -13,6 +13,11 @@ if ($utilisateurConnecte !== null) {
     );
 }
 
+$lienApplication =
+    $utilisateurConnecte !== null
+    && $utilisateurConnecte['role'] === 'ADMIN'
+        ? '/admin'
+        : '/';
 ?>
 
 <header
@@ -21,7 +26,7 @@ if ($utilisateurConnecte !== null) {
         rounded-4 bg-light px-3 py-2 mt-3 mb-4"
 >
     <a
-        href="<?= $this->url('/') ?>"
+        href="<?= $this->url($lienApplication) ?>"
         class="fs-5 fw-bold text-dark text-decoration-none"
     >
         Touche pas au klaxon
@@ -81,6 +86,8 @@ if ($utilisateurConnecte !== null) {
                 method="post"
                 class="mb-0"
             >
+            <?= $this->csrfField() ?>
+            
                 <button
                     type="submit"
                     class="btn btn-dark"

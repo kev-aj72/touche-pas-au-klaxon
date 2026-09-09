@@ -26,6 +26,7 @@
                         ) ?>"
                         method="post"
                     >
+                     <?= $this->csrfField() ?>
                         <div class="mb-3">
                             <label
                                 for="email"

@@ -29,6 +29,7 @@ class TrajetController extends DefaultController
     public function store(): string
     {
         $this->requireLogin();
+        $this->requireValidCsrfToken();
 
         $data = $this->getValidatedData();
 
@@ -71,6 +72,7 @@ class TrajetController extends DefaultController
     public function update(int $id): string
     {
         $this->requireLogin();
+        $this->requireValidCsrfToken();
 
         if ($this->getUserTrajet($id) === false) {
             http_response_code(403);
@@ -97,6 +99,7 @@ class TrajetController extends DefaultController
     public function delete(int $id): string
     {
         $this->requireLogin();
+        $this->requireValidCsrfToken();
 
         if ($this->getUserTrajet($id) === false) {
             http_response_code(403);
@@ -149,10 +152,15 @@ class TrajetController extends DefaultController
             'arrivee_timestamp' =>
                 strtotime($dateArrivee),
 
-            'nombre_places' =>
-                (int) (
-                    $_POST['nombre_places_total'] ?? 0
-                ),
+            'nombre_places_total' =>
+    (int) (
+        $_POST['nombre_places_total'] ?? 0
+    ),
+
+'nombre_places_disponibles' =>
+    (int) (
+        $_POST['nombre_places_disponibles'] ?? -1
+    ),
         ];
 
         return $this->validateTrajet($data)
@@ -166,15 +174,25 @@ class TrajetController extends DefaultController
         array $data
     ): ?string {
         if (
-            $data['id_agence_depart'] <= 0
-            || $data['id_agence_arrivee'] <= 0
-            || $data['date_depart'] === ''
-            || $data['date_arrivee'] === ''
-            || $data['nombre_places'] <= 0
-            || $data['nombre_places'] > 255
-        ) {
-            return 'Veuillez remplir correctement tous les champs.';
-        }
+    $data['id_agence_depart'] <= 0
+    || $data['id_agence_arrivee'] <= 0
+    || $data['date_depart'] === ''
+    || $data['date_arrivee'] === ''
+    || $data['nombre_places_total'] <= 0
+    || $data['nombre_places_total'] > 255
+    || $data['nombre_places_disponibles'] < 0
+    || $data['nombre_places_disponibles'] > 255
+) {
+    return 'Veuillez remplir correctement tous les champs.';
+}
+
+if (
+    $data['nombre_places_disponibles']
+    > $data['nombre_places_total']
+) {
+    return 'Le nombre de places disponibles ne peut pas '
+        . 'dépasser le nombre total de places.';
+}
 
         if (
             $this->agenceModel->getAgenceById(
@@ -215,46 +233,48 @@ class TrajetController extends DefaultController
         return null;
     }
 
-    /**
-     * Crée ou modifie un trajet.
-     */
-    private function saveTrajet(
-        array $data,
-        ?int $idTrajet = null
-    ): void {
-        $dateDepart = date(
-            'Y-m-d H:i:s',
-            $data['depart_timestamp']
-        );
+   /**
+ * Crée ou modifie un trajet.
+ */
+private function saveTrajet(
+    array $data,
+    ?int $idTrajet = null
+): void {
+    $dateDepart = date(
+        'Y-m-d H:i:s',
+        $data['depart_timestamp']
+    );
 
-        $dateArrivee = date(
-            'Y-m-d H:i:s',
-            $data['arrivee_timestamp']
-        );
+    $dateArrivee = date(
+        'Y-m-d H:i:s',
+        $data['arrivee_timestamp']
+    );
 
-        if ($idTrajet === null) {
-            $this->postModel->createTrajet(
-                $this->getUserId(),
-                $data['id_agence_depart'],
-                $data['id_agence_arrivee'],
-                $dateDepart,
-                $dateArrivee,
-                $data['nombre_places']
-            );
-
-            return;
-        }
-
-        $this->postModel->updateTrajet(
-            $idTrajet,
+    if ($idTrajet === null) {
+        $this->postModel->createTrajet(
             $this->getUserId(),
             $data['id_agence_depart'],
             $data['id_agence_arrivee'],
             $dateDepart,
             $dateArrivee,
-            $data['nombre_places']
+            $data['nombre_places_total'],
+            $data['nombre_places_disponibles']
         );
+
+        return;
     }
+
+    $this->postModel->updateTrajet(
+        $idTrajet,
+        $this->getUserId(),
+        $data['id_agence_depart'],
+        $data['id_agence_arrivee'],
+        $dateDepart,
+        $dateArrivee,
+        $data['nombre_places_total'],
+        $data['nombre_places_disponibles']
+    );
+}
 
     private function getUserTrajet(
         int $id

@@ -26,6 +26,8 @@ class UserController extends DefaultController
 
     public function authenticate(): string
     {
+        $this->requireValidCsrfToken();
+        
         if ($this->isLoginBlocked()) {
             return $this->renderLogin(
                 'Trop de tentatives. Réessayez dans 5 minutes.'
@@ -93,6 +95,8 @@ class UserController extends DefaultController
 
     public function logout(): void
     {
+        $this->requireValidCsrfToken();
+        
         $_SESSION = [];
 
         session_destroy();

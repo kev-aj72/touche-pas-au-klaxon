@@ -60,6 +60,7 @@ $idModal = 'detailsTrajet' . $idTrajet;
                         'Supprimer ce trajet ?'
                     );"
                 >
+                <?= $this->csrfField() ?>
                     <button
                         type="submit"
                         class="btn btn-sm btn-outline-danger"
