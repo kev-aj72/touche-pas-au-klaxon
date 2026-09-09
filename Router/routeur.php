@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Routeur initialisé dans Public/index.php.
+ *
+ * @var \Buki\Router\Router $router
+ */
 declare(strict_types=1);
 
 use App\Controller\AdminController;

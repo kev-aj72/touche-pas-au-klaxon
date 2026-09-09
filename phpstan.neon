@@ -1,0 +1,9 @@
+parameters:
+    level: 5
+
+    paths:
+        - App/Controller
+        - App/Model
+        - Core
+        - Public
+        - Router
