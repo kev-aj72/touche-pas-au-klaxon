@@ -38,6 +38,7 @@
                         <th>Date d’arrivée</th>
                         <th>Places</th>
                         <th>Auteur</th>
+                        <th>Détails</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -46,6 +47,17 @@
                     <?php foreach (
                         $trajetsAffiches as $trajet
                     ): ?>
+                        <?php
+
+                        $idTrajet =
+                            (int) $trajet['id_trajet'];
+
+                        $idModal =
+                            'detailsTrajetAdmin'
+                            . $idTrajet;
+
+                        ?>
+
                         <tr>
                             <td>
                                 <?= $trajet[
@@ -82,16 +94,37 @@
                             </td>
 
                             <td>
-                                <?= $trajet['auteur'] ?>
+                                <?= $trajet['contact'] ?>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm
+                                        btn-outline-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#<?= $idModal ?>"
+                                >
+                                    Voir
+                                </button>
+
+                                <?= $this->component(
+                                    'trajetModal',
+                                    [
+                                        'trajet' =>
+                                            $trajet,
+
+                                        'idModal' =>
+                                            $idModal,
+                                    ]
+                                ) ?>
                             </td>
 
                             <td>
                                 <form
                                     action="<?= $this->url(
                                         '/admin/trajets/'
-                                        . $trajet[
-                                            'id_trajet'
-                                        ]
+                                        . $idTrajet
                                         . '/supprimer'
                                     ) ?>"
                                     method="post"
@@ -100,6 +133,8 @@
                                         'Supprimer ce trajet ?'
                                     );"
                                 >
+                                    <?= $this->csrfField() ?>
+
                                     <button
                                         type="submit"
                                         class="btn btn-sm

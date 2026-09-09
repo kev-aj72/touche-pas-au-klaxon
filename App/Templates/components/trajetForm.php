@@ -25,8 +25,14 @@ $dateArrivee = isset($trajet['date_heure_arrivee'])
     )
     : '';
 
-$nombrePlaces =
+$nombrePlacesTotal =
     (int) ($trajet['nombre_places_total'] ?? 1);
+
+$nombrePlacesDisponibles =
+    (int) (
+        $trajet['nombre_places_disponibles']
+        ?? $nombrePlacesTotal
+    );
 
 ?>
 
@@ -35,6 +41,8 @@ $nombrePlaces =
     method="post"
     class="card shadow-sm p-4"
 >
+    <?= $this->csrfField() ?>
+
     <div class="row g-3">
         <div class="col-md-6">
             <label
@@ -144,22 +152,42 @@ $nombrePlaces =
             >
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <label
-                for="nombre_places"
+                for="nombre_places_total"
                 class="form-label fw-semibold"
             >
-                Nombre de places
+                Nombre total de places
             </label>
 
             <input
                 type="number"
-                id="nombre_places"
+                id="nombre_places_total"
                 name="nombre_places_total"
                 class="form-control"
                 min="1"
                 max="255"
-                value="<?= $nombrePlaces ?>"
+                value="<?= $nombrePlacesTotal ?>"
+                required
+            >
+        </div>
+
+        <div class="col-md-6">
+            <label
+                for="nombre_places_disponibles"
+                class="form-label fw-semibold"
+            >
+                Nombre de places disponibles
+            </label>
+
+            <input
+                type="number"
+                id="nombre_places_disponibles"
+                name="nombre_places_disponibles"
+                class="form-control"
+                min="0"
+                max="255"
+                value="<?= $nombrePlacesDisponibles ?>"
                 required
             >
         </div>

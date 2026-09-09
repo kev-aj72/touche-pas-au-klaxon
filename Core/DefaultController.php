@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Core;
 
+use Core\Traits\CsrfTrait;
 use Core\Traits\FlashMessageTrait;
 use Core\Traits\TemplateTrait;
 
@@ -11,6 +12,7 @@ abstract class DefaultController
 {
     use TemplateTrait;
     use FlashMessageTrait;
+    use CsrfTrait;
 
     protected function url(
         string $path = ''

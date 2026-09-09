@@ -85,6 +85,7 @@ class AdminController extends DefaultController
     public function storeAgence(): void
     {
         $this->requireAdmin();
+        $this->requireValidCsrfToken();
 
         $this->saveAgence();
     }
@@ -118,6 +119,7 @@ class AdminController extends DefaultController
     public function updateAgence(int $id): void
     {
         $this->requireAdmin();
+        $this->requireValidCsrfToken();
 
         if (
             $this->agenceModel->getAgenceById($id)
@@ -134,6 +136,7 @@ class AdminController extends DefaultController
     public function deleteAgence(int $id): void
     {
         $this->requireAdmin();
+        $this->requireValidCsrfToken();
 
         $agence = $this->agenceModel->getAgenceById($id);
 
@@ -161,29 +164,55 @@ class AdminController extends DefaultController
     }
 
     public function trajets(): string
-    {
-        $this->requireAdmin();
+{
+    $this->requireAdmin();
 
-        $trajetsAffiches = $this->formatTrajets(
-            $this->postModel->getAllTrajets()
+    $trajetsAffiches = [];
+
+    foreach (
+        $this->postModel->getAllTrajets()
+        as $trajet
+    ) {
+        $trajetAffiche = $this->formatTrajet(
+            $trajet,
+            'contact'
         );
 
-        [$messageSucces, $messageErreur] =
-            $this->pullFlashMessages();
+        $trajetAffiche['telephone'] =
+            $this->escape(
+                $trajet['auteur_telephone']
+            );
 
-        return $this->render(
-            'admin/trajets',
-            [
-                'trajetsAffiches' => $trajetsAffiches,
-                'messageSucces' => $messageSucces,
-                'messageErreur' => $messageErreur,
-            ]
-        );
+        $trajetAffiche['email'] =
+            $this->escape(
+                $trajet['auteur_email']
+            );
+
+        $trajetsAffiches[] = $trajetAffiche;
     }
+
+    [$messageSucces, $messageErreur] =
+        $this->pullFlashMessages();
+
+    return $this->render(
+        'admin/trajets',
+        [
+            'trajetsAffiches' =>
+                $trajetsAffiches,
+
+            'messageSucces' =>
+                $messageSucces,
+
+            'messageErreur' =>
+                $messageErreur,
+        ]
+    );
+}
 
     public function deleteTrajet(int $id): void
     {
         $this->requireAdmin();
+        $this->requireValidCsrfToken();
 
         if ($this->postModel->getTrajetById($id) === false) {
             $this->flash(
