@@ -45,3 +45,4 @@ trait FlashMessageTrait {
                 $this->pullFlash('error')];
     }
 }
+?>

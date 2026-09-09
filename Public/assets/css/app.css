@@ -2439,9 +2439,7 @@ textarea.form-control-lg {
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
 }
-.btn-check[disabled] + .btn, header nav .btn-check[disabled] + a,
-header nav .btn-check[disabled] + button, .btn-check:disabled + .btn, header nav .btn-check:disabled + a,
-header nav .btn-check:disabled + button {
+.btn-check[disabled] + .btn, .btn-check:disabled + .btn {
   pointer-events: none;
   filter: none;
   opacity: 0.65;
@@ -2640,15 +2638,11 @@ header nav .btn-check:disabled + button {
 .input-group > .form-floating:focus-within {
   z-index: 5;
 }
-.input-group .btn, .input-group header nav a, header nav .input-group a,
-.input-group header nav button,
-header nav .input-group button {
+.input-group .btn {
   position: relative;
   z-index: 2;
 }
-.input-group .btn:focus, .input-group header nav a:focus, header nav .input-group a:focus,
-.input-group header nav button:focus,
-header nav .input-group button:focus {
+.input-group .btn:focus {
   z-index: 5;
 }
 
@@ -2670,9 +2664,7 @@ header nav .input-group button:focus {
 .input-group-lg > .form-control,
 .input-group-lg > .form-select,
 .input-group-lg > .input-group-text,
-.input-group-lg > .btn,
-header nav .input-group-lg > a,
-header nav .input-group-lg > button {
+.input-group-lg > .btn {
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
   border-radius: var(--bs-border-radius-lg);
@@ -2681,9 +2673,7 @@ header nav .input-group-lg > button {
 .input-group-sm > .form-control,
 .input-group-sm > .form-select,
 .input-group-sm > .input-group-text,
-.input-group-sm > .btn,
-header nav .input-group-sm > a,
-header nav .input-group-sm > button {
+.input-group-sm > .btn {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   border-radius: var(--bs-border-radius-sm);
@@ -2899,8 +2889,7 @@ header nav .input-group-sm > button {
   z-index: 4;
 }
 
-.btn, header nav a,
-header nav button {
+.btn {
   --bs-btn-padding-x: 0.75rem;
   --bs-btn-padding-y: 0.375rem;
   --bs-btn-font-family: ;
@@ -2934,64 +2923,44 @@ header nav button {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn, header nav a,
-  header nav button {
+  .btn {
     transition: none;
   }
 }
-.btn:hover, header nav a:hover,
-header nav button:hover {
+.btn:hover {
   color: var(--bs-btn-hover-color);
   background-color: var(--bs-btn-hover-bg);
   border-color: var(--bs-btn-hover-border-color);
 }
-.btn-check + .btn:hover, header nav .btn-check + a:hover,
-header nav .btn-check + button:hover {
+.btn-check + .btn:hover {
   color: var(--bs-btn-color);
   background-color: var(--bs-btn-bg);
   border-color: var(--bs-btn-border-color);
 }
-.btn:focus-visible, header nav a:focus-visible,
-header nav button:focus-visible {
+.btn:focus-visible {
   color: var(--bs-btn-hover-color);
   background-color: var(--bs-btn-hover-bg);
   border-color: var(--bs-btn-hover-border-color);
   outline: 0;
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
-.btn-check:focus-visible + .btn, header nav .btn-check:focus-visible + a,
-header nav .btn-check:focus-visible + button {
+.btn-check:focus-visible + .btn {
   border-color: var(--bs-btn-hover-border-color);
   outline: 0;
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
-.btn-check:checked + .btn, header nav .btn-check:checked + a,
-header nav .btn-check:checked + button, :not(.btn-check) + .btn:active, header nav :not(.btn-check) + a:active,
-header nav :not(.btn-check) + button:active, .btn:first-child:active, header nav a:first-child:active,
-header nav button:first-child:active, .btn.active, header nav a.active,
-header nav button.active, .btn.show, header nav a.show,
-header nav button.show {
+.btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show {
   color: var(--bs-btn-active-color);
   background-color: var(--bs-btn-active-bg);
   border-color: var(--bs-btn-active-border-color);
 }
-.btn-check:checked + .btn:focus-visible, header nav .btn-check:checked + a:focus-visible,
-header nav .btn-check:checked + button:focus-visible, :not(.btn-check) + .btn:active:focus-visible, header nav :not(.btn-check) + a:active:focus-visible,
-header nav :not(.btn-check) + button:active:focus-visible, .btn:first-child:active:focus-visible, header nav a:first-child:active:focus-visible,
-header nav button:first-child:active:focus-visible, .btn.active:focus-visible, header nav a.active:focus-visible,
-header nav button.active:focus-visible, .btn.show:focus-visible, header nav a.show:focus-visible,
-header nav button.show:focus-visible {
+.btn-check:checked + .btn:focus-visible, :not(.btn-check) + .btn:active:focus-visible, .btn:first-child:active:focus-visible, .btn.active:focus-visible, .btn.show:focus-visible {
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
-.btn-check:checked:focus-visible + .btn, header nav .btn-check:checked:focus-visible + a,
-header nav .btn-check:checked:focus-visible + button {
+.btn-check:checked:focus-visible + .btn {
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
-.btn:disabled, header nav a:disabled,
-header nav button:disabled, .btn.disabled, header nav a.disabled,
-header nav button.disabled, fieldset:disabled .btn, fieldset:disabled header nav a, header nav fieldset:disabled a,
-fieldset:disabled header nav button,
-header nav fieldset:disabled button {
+.btn:disabled, .btn.disabled, fieldset:disabled .btn {
   color: var(--bs-btn-disabled-color);
   pointer-events: none;
   background-color: var(--bs-btn-disabled-bg);
@@ -3118,8 +3087,7 @@ header nav fieldset:disabled button {
   --bs-btn-disabled-border-color: #f1f8fc;
 }
 
-.btn-dark, header nav a,
-header nav button {
+.btn-dark {
   --bs-btn-color: #fff;
   --bs-btn-bg: #384050;
   --bs-btn-border-color: #384050;
@@ -3294,16 +3262,14 @@ header nav button {
   color: var(--bs-btn-hover-color);
 }
 
-.btn-lg, .btn-group-lg > .btn, header nav .btn-group-lg > a,
-header nav .btn-group-lg > button {
+.btn-lg, .btn-group-lg > .btn {
   --bs-btn-padding-y: 0.5rem;
   --bs-btn-padding-x: 1rem;
   --bs-btn-font-size: 1.25rem;
   --bs-btn-border-radius: var(--bs-border-radius-lg);
 }
 
-.btn-sm, .btn-group-sm > .btn, header nav .btn-group-sm > a,
-header nav .btn-group-sm > button {
+.btn-sm, .btn-group-sm > .btn {
   --bs-btn-padding-y: 0.25rem;
   --bs-btn-padding-x: 0.5rem;
   --bs-btn-font-size: 0.875rem;
@@ -3670,49 +3636,23 @@ header nav .btn-group-sm > button {
   display: inline-flex;
   vertical-align: middle;
 }
-.btn-group > .btn, header nav .btn-group > a,
-header nav .btn-group > button,
-.btn-group-vertical > .btn,
-header nav .btn-group-vertical > a,
-header nav .btn-group-vertical > button {
+.btn-group > .btn,
+.btn-group-vertical > .btn {
   position: relative;
   flex: 1 1 auto;
 }
-.btn-group > .btn-check:checked + .btn, header nav .btn-group > .btn-check:checked + a,
-header nav .btn-group > .btn-check:checked + button,
+.btn-group > .btn-check:checked + .btn,
 .btn-group > .btn-check:focus + .btn,
-header nav .btn-group > .btn-check:focus + a,
-header nav .btn-group > .btn-check:focus + button,
 .btn-group > .btn:hover,
-header nav .btn-group > a:hover,
-header nav .btn-group > button:hover,
 .btn-group > .btn:focus,
-header nav .btn-group > a:focus,
-header nav .btn-group > button:focus,
 .btn-group > .btn:active,
-header nav .btn-group > a:active,
-header nav .btn-group > button:active,
 .btn-group > .btn.active,
-header nav .btn-group > a.active,
-header nav .btn-group > button.active,
 .btn-group-vertical > .btn-check:checked + .btn,
-header nav .btn-group-vertical > .btn-check:checked + a,
-header nav .btn-group-vertical > .btn-check:checked + button,
 .btn-group-vertical > .btn-check:focus + .btn,
-header nav .btn-group-vertical > .btn-check:focus + a,
-header nav .btn-group-vertical > .btn-check:focus + button,
 .btn-group-vertical > .btn:hover,
-header nav .btn-group-vertical > a:hover,
-header nav .btn-group-vertical > button:hover,
 .btn-group-vertical > .btn:focus,
-header nav .btn-group-vertical > a:focus,
-header nav .btn-group-vertical > button:focus,
 .btn-group-vertical > .btn:active,
-header nav .btn-group-vertical > a:active,
-header nav .btn-group-vertical > button:active,
-.btn-group-vertical > .btn.active,
-header nav .btn-group-vertical > a.active,
-header nav .btn-group-vertical > button.active {
+.btn-group-vertical > .btn.active {
   z-index: 1;
 }
 
@@ -3728,30 +3668,19 @@ header nav .btn-group-vertical > button.active {
 .btn-group {
   border-radius: var(--bs-border-radius);
 }
-.btn-group > :not(.btn-check:first-child) + .btn, header nav .btn-group > :not(.btn-check:first-child) + a,
-header nav .btn-group > :not(.btn-check:first-child) + button,
+.btn-group > :not(.btn-check:first-child) + .btn,
 .btn-group > .btn-group:not(:first-child) {
   margin-left: calc(-1 * var(--bs-border-width));
 }
-.btn-group > .btn:not(:last-child):not(.dropdown-toggle), header nav .btn-group > a:not(:last-child):not(.dropdown-toggle),
-header nav .btn-group > button:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
 .btn-group > .btn.dropdown-toggle-split:first-child,
-header nav .btn-group > a.dropdown-toggle-split:first-child,
-header nav .btn-group > button.dropdown-toggle-split:first-child,
-.btn-group > .btn-group:not(:last-child) > .btn,
-header nav .btn-group > .btn-group:not(:last-child) > a,
-header nav .btn-group > .btn-group:not(:last-child) > button {
+.btn-group > .btn-group:not(:last-child) > .btn {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.btn-group > .btn:nth-child(n+3), header nav .btn-group > a:nth-child(n+3),
-header nav .btn-group > button:nth-child(n+3),
+.btn-group > .btn:nth-child(n+3),
 .btn-group > :not(.btn-check) + .btn,
-header nav .btn-group > :not(.btn-check) + a,
-header nav .btn-group > :not(.btn-check) + button,
-.btn-group > .btn-group:not(:first-child) > .btn,
-header nav .btn-group > .btn-group:not(:first-child) > a,
-header nav .btn-group > .btn-group:not(:first-child) > button {
+.btn-group > .btn-group:not(:first-child) > .btn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -3767,14 +3696,12 @@ header nav .btn-group > .btn-group:not(:first-child) > button {
   margin-right: 0;
 }
 
-.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split, header nav .btn-group-sm > a + .dropdown-toggle-split,
-header nav .btn-group-sm > button + .dropdown-toggle-split {
+.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split {
   padding-right: 0.375rem;
   padding-left: 0.375rem;
 }
 
-.btn-lg + .dropdown-toggle-split, .btn-group-lg > .btn + .dropdown-toggle-split, header nav .btn-group-lg > a + .dropdown-toggle-split,
-header nav .btn-group-lg > button + .dropdown-toggle-split {
+.btn-lg + .dropdown-toggle-split, .btn-group-lg > .btn + .dropdown-toggle-split {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
 }
@@ -3784,32 +3711,22 @@ header nav .btn-group-lg > button + .dropdown-toggle-split {
   align-items: flex-start;
   justify-content: center;
 }
-.btn-group-vertical > .btn, header nav .btn-group-vertical > a,
-header nav .btn-group-vertical > button,
+.btn-group-vertical > .btn,
 .btn-group-vertical > .btn-group {
   width: 100%;
 }
-.btn-group-vertical > .btn:not(:first-child), header nav .btn-group-vertical > a:not(:first-child),
-header nav .btn-group-vertical > button:not(:first-child),
+.btn-group-vertical > .btn:not(:first-child),
 .btn-group-vertical > .btn-group:not(:first-child) {
   margin-top: calc(-1 * var(--bs-border-width));
 }
-.btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle), header nav .btn-group-vertical > a:not(:last-child):not(.dropdown-toggle),
-header nav .btn-group-vertical > button:not(:last-child):not(.dropdown-toggle),
-.btn-group-vertical > .btn-group:not(:last-child) > .btn,
-header nav .btn-group-vertical > .btn-group:not(:last-child) > a,
-header nav .btn-group-vertical > .btn-group:not(:last-child) > button {
+.btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle),
+.btn-group-vertical > .btn-group:not(:last-child) > .btn {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.btn-group-vertical > .btn:nth-child(n+3), header nav .btn-group-vertical > a:nth-child(n+3),
-header nav .btn-group-vertical > button:nth-child(n+3),
+.btn-group-vertical > .btn:nth-child(n+3),
 .btn-group-vertical > :not(.btn-check) + .btn,
-header nav .btn-group-vertical > :not(.btn-check) + a,
-header nav .btn-group-vertical > :not(.btn-check) + button,
-.btn-group-vertical > .btn-group:not(:first-child) > .btn,
-header nav .btn-group-vertical > .btn-group:not(:first-child) > a,
-header nav .btn-group-vertical > .btn-group:not(:first-child) > button {
+.btn-group-vertical > .btn-group:not(:first-child) > .btn {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -4848,8 +4765,7 @@ header nav .btn-group-vertical > .btn-group:not(:first-child) > button {
   display: none;
 }
 
-.btn .badge, header nav a .badge,
-header nav button .badge {
+.btn .badge {
   position: relative;
   top: -1px;
 }
@@ -6798,8 +6714,7 @@ header nav button .badge {
   background-color: currentcolor;
   opacity: 0.5;
 }
-.placeholder.btn::before, header nav a.placeholder::before,
-header nav button.placeholder::before {
+.placeholder.btn::before {
   display: inline-block;
   content: "";
 }
@@ -11944,8 +11859,7 @@ header nav button.placeholder::before {
     display: none !important;
   }
 }
-html,
-body {
+html, body {
   min-height: 100%;
 }
 
@@ -11955,10 +11869,8 @@ body {
   flex-direction: column;
 }
 
-header,
-main,
-footer {
-  width: calc(100% - 2rem);
+header, main, footer {
+  width: 100%;
   max-width: 936px;
   margin-left: auto;
   margin-right: auto;
@@ -11982,20 +11894,6 @@ header > a {
   font-size: 1.1rem;
   font-weight: 700;
   text-decoration: none;
-}
-
-header nav ul {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-header nav li {
-  display: flex;
-  align-items: center;
 }
 
 header nav form {

@@ -66,3 +66,4 @@ trait TrajetFormatterTrait {
         return (new DateTimeImmutable($date))->format('d/m/Y à H:i');
     }
 }
+?>

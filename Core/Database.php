@@ -20,3 +20,4 @@ function connection(): PDO {
         die('Erreur de connexion : ' . $e->getMessage());
     }
 }
+?>

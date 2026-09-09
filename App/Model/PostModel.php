@@ -153,3 +153,4 @@ class PostModel extends DefaultModel {
             ['id_trajet' => $idTrajet,]);
     }
 }
+?>

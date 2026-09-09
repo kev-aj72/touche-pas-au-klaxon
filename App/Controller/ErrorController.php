@@ -19,3 +19,4 @@ class ErrorController extends DefaultController {
         return $this->render('errors404');
     }
 }
+?>
