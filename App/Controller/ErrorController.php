@@ -6,10 +6,16 @@ namespace App\Controller;
 
 use Core\DefaultController;
 
-class ErrorController extends DefaultController
-{
-    public function index(): string
-    {
+/**
+ * Gère l’affichage des pages d’erreur.
+ */
+class ErrorController extends DefaultController {
+    /**
+     * Affiche la page correspondant à une erreur 404.
+     *
+     * @return string Contenu HTML de la page 404.
+     */
+    public function index(): string {
         return $this->render('errors404');
     }
 }
