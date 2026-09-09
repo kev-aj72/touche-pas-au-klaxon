@@ -19,9 +19,10 @@ Dotenv::createImmutable($root)->load();
 
 session_start();
 
+$debug = filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
 $router = new Router(
-    ['base_folder' => $_ENV['APP_BASE_PATH'],
-     'debug' => true,
+    ['base_folder' => $_ENV['APP_BASE_PATH'], 'debug' => $debug,
      'paths' => ['controllers' => $root . '/App/Controller'],
      'namespaces' => ['controllers' => 'App\\Controller']]);
 

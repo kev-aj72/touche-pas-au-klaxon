@@ -17,7 +17,12 @@ function connection(): PDO {
 
         return $bdd;
     } catch (PDOException $e) {
-        die('Erreur de connexion : ' . $e->getMessage());
+    $debug =($_ENV['APP_DEBUG'] ?? 'false') === 'true';
+
+    if ($debug) {
+        die('Erreur de connexion : '. $e->getMessage());
+    }
+        die('Impossible de se connecter à la base de données.');
     }
 }
 ?>
