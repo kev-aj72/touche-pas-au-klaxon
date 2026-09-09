@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "sass": "sass public/assets/scss/app.scss public/assets/css/app.css",
-    "sass:watch": "sass --watch public/assets/scss/app.scss public/assets/css/app.css"
+    "sass": "sass Public/assets/scss/app.scss Public/assets/css/app.css",
+    "sass:watch": "sass --watch Public/assets/scss/app.scss Public/assets/css/app.css"
 },
   "repository": {
     "type": "git",

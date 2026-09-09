@@ -10,287 +10,256 @@ use App\Model\UserModel;
 use Core\DefaultController;
 use Core\Traits\TrajetFormatterTrait;
 
-class AdminController extends DefaultController
-{
+/**
+ * Gère les fonctionnalités réservées
+ * aux administrateurs.
+ */
+class AdminController extends DefaultController {
+    
     use TrajetFormatterTrait;
 
-    public function __construct(
-        private AgenceModel $agenceModel =
-            new AgenceModel(),
+    /**
+     * Modèle des agences.
+     */
+    private AgenceModel $agenceModel;
 
-        private PostModel $postModel =
-            new PostModel(),
+    /**
+     * Modèle des trajets.
+     */
+    private PostModel $postModel;
 
-        private UserModel $userModel =
-            new UserModel()
-    ) {
+    /**
+     * Modèle des utilisateurs.
+     */
+    private UserModel $userModel;
+
+    /**
+     * Initialise les modèles nécessaires.
+     */
+    public function __construct() {
+
+        $this->agenceModel = new AgenceModel();
+        $this->postModel = new PostModel();
+        $this->userModel = new UserModel();
     }
 
-    public function index(): string
-    {
-        $this->requireAdmin();
+    /**
+     * Affiche le tableau de bord administrateur.
+     *
+     * @return string Contenu HTML du tableau de bord.
+     */
+    public function index(): string {
 
+        $this->requireAdmin();
         return $this->render('admin/dashboard');
     }
 
-    public function employes(): string
-    {
-        $this->requireAdmin();
+    /**
+     * Affiche la liste des employés.
+     *
+     * @return string Contenu HTML de la liste.
+     */
+    public function employes(): string {
 
+        $this->requireAdmin();
         $employesAffiches = [];
 
-        foreach ($this->userModel->getEmployes() as $employe) {
-            $employesAffiches[] = [
-                'nom' => $this->escape($employe['nom']),
-                'prenom' => $this->escape($employe['prenom']),
-                'telephone' =>
-                    $this->escape($employe['telephone']),
-                'email' => $this->escape($employe['email']),
-                'role' => $this->escape($employe['role']),
-            ];
-        }
+        foreach ($this->userModel->getEmployes()as $employe) {
 
-        return $this->render(
-            'admin/employes',
-            ['employesAffiches' => $employesAffiches]
-        );
+            $employesAffiches[] = ['nom' =>$this->escape($employe['nom']),
+                                   'prenom' =>$this->escape($employe['prenom']),
+                                   'telephone' =>$this->escape($employe['telephone']),
+                                   'email' =>$this->escape($employe['email']),
+                                   'role' =>$this->escape($employe['role']),];
+        }
+        return $this->render('admin/employes',['employesAffiches' =>$employesAffiches,]);
     }
 
-    public function agences(): string
-    {
-        $this->requireAdmin();
+    /**
+     * Affiche la liste et le formulaire
+     * de création des agences.
+     *
+     * @return string Contenu HTML de la page.
+     */
+    public function agences(): string {
 
+        $this->requireAdmin();
         $agencesAffichees = [];
 
-        foreach ($this->agenceModel->getAgences() as $agence) {
-            $agencesAffichees[] = [
-                'id_agence' => (int) $agence['id_agence'],
-                'ville' => $this->escape($agence['ville']),
-            ];
+        foreach ($this->agenceModel->getAgences()as $agence) {
+            $agencesAffichees[] = ['id_agence' =>(int) $agence['id_agence'],
+                                   'ville' =>$this->escape($agence['ville']),];
         }
+        [$messageSucces, $messageErreur] = $this->pullFlashMessages();
 
-        [$messageSucces, $messageErreur] =
-            $this->pullFlashMessages();
-
-        return $this->render(
-            'admin/agences',
-            [
-                'agencesAffichees' => $agencesAffichees,
-                'messageSucces' => $messageSucces,
-                'messageErreur' => $messageErreur,
-            ]
-        );
+        return $this->render('admin/agences',['agencesAffichees' =>$agencesAffichees,
+                                              'messageSucces' =>$messageSucces,
+                                              'messageErreur' =>$messageErreur,]);
     }
 
-    public function storeAgence(): void
-    {
+    /**
+     * Enregistre une nouvelle agence.
+     *
+     * @return void
+     */
+    public function storeAgence(): void {
+
         $this->requireAdmin();
         $this->requireValidCsrfToken();
-
         $this->saveAgence();
     }
 
-    public function editAgence(int $id): string
-    {
-        $this->requireAdmin();
+    /**
+     * Affiche le formulaire de modification
+     * d’une agence.
+     *
+     * @param int $id Identifiant de l’agence.
+     * @return string Contenu HTML du formulaire.
+     */
+    public function editAgence(int $id): string {
 
-        $agence = $this->agenceModel->getAgenceById($id);
+        $this->requireAdmin();
+        $agence =$this->agenceModel->getAgenceById($id);
 
         if ($agence === false) {
             http_response_code(404);
-
             return 'Agence introuvable.';
         }
-
-        return $this->render(
-            'admin/editAgence',
-            [
-                'agenceAffichee' => [
-                    'id_agence' =>
-                        (int) $agence['id_agence'],
-
-                    'ville' =>
-                        $this->escape($agence['ville']),
-                ],
-            ]
-        );
+        return $this->render('admin/editAgence',['agenceAffichee' => ['id_agence' =>(int) $agence['id_agence'],
+                                                 'ville' => $this->escape($agence['ville']),],]);
     }
 
-    public function updateAgence(int $id): void
-    {
+    /**
+     * Enregistre la modification d’une agence.
+     *
+     * @param int $id Identifiant de l’agence.
+     * @return void
+     */
+    public function updateAgence(int $id): void {
+
         $this->requireAdmin();
         $this->requireValidCsrfToken();
-
-        if (
-            $this->agenceModel->getAgenceById($id)
-            === false
-        ) {
+        if ($this->agenceModel->getAgenceById($id) === false) {
             http_response_code(404);
-
             exit('Agence introuvable.');
         }
-
         $this->saveAgence($id);
     }
 
-    public function deleteAgence(int $id): void
-    {
+    /**
+     * Supprime une agence si elle n’est utilisée
+     * par aucun trajet.
+     *
+     * @param int $id Identifiant de l’agence.
+     * @return void
+     */
+    public function deleteAgence(int $id): void {
+
         $this->requireAdmin();
         $this->requireValidCsrfToken();
-
         $agence = $this->agenceModel->getAgenceById($id);
 
         if ($agence === false) {
-            $this->flash(
-                'error',
-                'Agence introuvable.'
-            );
+            $this->flash('error','Agence introuvable.');
         } elseif ($this->agenceModel->isAgenceUsed($id)) {
-            $this->flash(
-                'error',
-                'Cette agence ne peut pas être supprimée '
-                    . 'car elle est utilisée par un trajet.'
-            );
+            $this->flash('error','Cette agence ne peut pas être supprimée car elle est utilisée par un trajet.');
         } else {
             $this->agenceModel->deleteAgence($id);
-
-            $this->flash(
-                'success',
-                'L’agence a bien été supprimée.'
-            );
+            $this->flash('success','L’agence a bien été supprimée.');
         }
-
         $this->redirect('/admin/agences');
     }
 
-    public function trajets(): string
-{
-    $this->requireAdmin();
+    /**
+     * Affiche la liste de tous les trajets.
+     *
+     * @return string Contenu HTML de la liste.
+     */
+    public function trajets(): string {
 
-    $trajetsAffiches = [];
+        $this->requireAdmin();
+        $trajetsAffiches = [];
 
-    foreach (
-        $this->postModel->getAllTrajets()
-        as $trajet
-    ) {
-        $trajetAffiche = $this->formatTrajet(
-            $trajet,
-            'contact'
-        );
+        foreach ($this->postModel->getAllTrajets() as $trajet) {
+            $trajetAffiche = $this->formatTrajet($trajet,'contact');
+            $trajetAffiche['telephone'] = $this->escape($trajet['auteur_telephone']);
+            $trajetAffiche['email'] = $this->escape($trajet['auteur_email']);
+            $trajetsAffiches[] = $trajetAffiche;
+        }
+        [$messageSucces, $messageErreur] =$this->pullFlashMessages();
 
-        $trajetAffiche['telephone'] =
-            $this->escape(
-                $trajet['auteur_telephone']
-            );
-
-        $trajetAffiche['email'] =
-            $this->escape(
-                $trajet['auteur_email']
-            );
-
-        $trajetsAffiches[] = $trajetAffiche;
+        return $this->render('admin/trajets',['trajetsAffiches' => $trajetsAffiches,
+                                              'messageSucces' => $messageSucces,
+                                              'messageErreur' => $messageErreur,]);
     }
 
-    [$messageSucces, $messageErreur] =
-        $this->pullFlashMessages();
+    /**
+     * Supprime un trajet depuis l’administration.
+     *
+     * @param int $id Identifiant du trajet.
+     * @return void
+     */
+    public function deleteTrajet(int $id): void {
 
-    return $this->render(
-        'admin/trajets',
-        [
-            'trajetsAffiches' =>
-                $trajetsAffiches,
-
-            'messageSucces' =>
-                $messageSucces,
-
-            'messageErreur' =>
-                $messageErreur,
-        ]
-    );
-}
-
-    public function deleteTrajet(int $id): void
-    {
         $this->requireAdmin();
         $this->requireValidCsrfToken();
 
         if ($this->postModel->getTrajetById($id) === false) {
-            $this->flash(
-                'error',
-                'Trajet introuvable.'
-            );
+                $this->flash('error','Trajet introuvable.');
         } else {
             $this->postModel->deleteTrajetAdmin($id);
-
-            $this->flash(
-                'success',
-                'Le trajet a bien été supprimé.'
-            );
+            $this->flash('success','Le trajet a bien été supprimé.');
         }
-
         $this->redirect('/admin/trajets');
     }
 
     /**
-     * Crée ou modifie une agence.
+     * Crée ou modifie une agence,
+     * puis redirige vers la liste.
+     *
+     * @param int|null $idAgence Identifiant
+     * de l’agence à modifier.
+     *
+     * @return never
      */
-    private function saveAgence(
-        ?int $idAgence = null
-    ): never {
+    private function saveAgence(?int $idAgence = null): never {
+       
         $ville = trim($_POST['ville'] ?? '');
-
-        $error = $this->validateVille(
-            $ville,
-            $idAgence
-        );
-
+        $error = $this->validateVille($ville,$idAgence );
         if ($error !== null) {
-            $this->flash('error', $error);
+            $this->flash('error',$error);
         } elseif ($idAgence === null) {
             $this->agenceModel->createAgence($ville);
-
-            $this->flash(
-                'success',
-                'L’agence a bien été créée.'
-            );
+            $this->flash('success','L’agence a bien été créée.');
         } else {
-            $this->agenceModel->updateAgence(
-                $idAgence,
-                $ville
-            );
-
-            $this->flash(
-                'success',
-                'L’agence a bien été modifiée.'
-            );
+            $this->agenceModel->updateAgence($idAgence,$ville);
+            $this->flash('success','L’agence a bien été modifier.');
         }
-
         $this->redirect('/admin/agences');
     }
 
-    private function validateVille(
-        string $ville,
-        ?int $idAgence = null
-    ): ?string {
+    /**
+     * Vérifie le nom saisi pour une agence.
+     *
+     * @param string $ville Nom de la ville.
+     * @param int|null $idAgence Identifiant
+     * de l’agence actuellement modifiée.
+     *
+     * @return string|null Message d’erreur ou null.
+     */
+    private function validateVille(string $ville,?int $idAgence = null): ?string {
         if ($ville === '') {
-            return 'Le nom de la ville est obligatoire.';
+             return 'Le nom de la ville est obligatoire.';
         }
 
         if (mb_strlen($ville) > 100) {
-            return 'Le nom de la ville ne peut pas dépasser '
-                . '100 caractères.';
+            return 'Le nom de la ville ne peut pas dépasser 100 caractères.';
         }
+        $agence = $this->agenceModel->getAgenceByVille($ville);
 
-        $agence =
-            $this->agenceModel->getAgenceByVille($ville);
-
-        if (
-            $agence !== false
-            && (int) $agence['id_agence'] !== $idAgence
-        ) {
+        if ($agence !== false && (int) $agence['id_agence'] !== $idAgence) {
             return 'Une agence utilise déjà ce nom.';
         }
-
         return null;
     }
 }
