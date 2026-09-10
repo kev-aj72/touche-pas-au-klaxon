@@ -64,11 +64,11 @@ class AdminController extends DefaultController {
 
         foreach ($this->userModel->getEmployes()as $employe) {
 
-            $employesAffiches[] = ['nom' =>$this->escape($employe['nom']),
-                                   'prenom' =>$this->escape($employe['prenom']),
-                                   'telephone' =>$this->escape($employe['telephone']),
-                                   'email' =>$this->escape($employe['email']),
-                                   'role' =>$this->escape($employe['role']),];
+            $employesAffiches[] = ['nom' => (string) $employe['nom'],
+                                   'prenom' => (string) $employe['prenom'],
+                                   'telephone' => (string) $employe['telephone'],
+                                   'email' => (string) $employe['email'],
+                                   'role' => (string) $employe['role']];
         }
         return $this->render('admin/employes',['employesAffiches' =>$employesAffiches,]);
     }
@@ -86,7 +86,7 @@ class AdminController extends DefaultController {
 
         foreach ($this->agenceModel->getAgences()as $agence) {
             $agencesAffichees[] = ['id_agence' =>(int) $agence['id_agence'],
-                                   'ville' =>$this->escape($agence['ville']),];
+                                   'ville' => (string) $agence['ville']];
         }
         [$messageSucces, $messageErreur] = $this->pullFlashMessages();
 
@@ -124,7 +124,7 @@ class AdminController extends DefaultController {
             return 'Agence introuvable.';
         }
         return $this->render('admin/editAgence',['agenceAffichee' => ['id_agence' =>(int) $agence['id_agence'],
-                                                 'ville' => $this->escape($agence['ville']),],]);
+                                                 'ville' => (string) $agence['ville']]]);
     }
 
     /**
@@ -218,7 +218,7 @@ class AdminController extends DefaultController {
             $this->flash('success','L’agence a bien été créée.');
         } else {
             $this->agenceModel->updateAgence($idAgence,$ville);
-            $this->flash('success','L’agence a bien été modifier.');
+            $this->flash('success','L’agence a bien été modifiée.');
         }
         $this->redirect('/admin/agences');
     }
@@ -258,8 +258,8 @@ private function renderTrajetsPage(string $template): string {
     $trajetsAffiches = [];
     foreach ($this->postModel->getAllTrajets() as $trajet) {
         $trajetAffiche = $this->formatTrajet($trajet,'contact');
-        $trajetAffiche['telephone'] = $this->escape($trajet['auteur_telephone']);
-        $trajetAffiche['email'] = $this->escape($trajet['auteur_email']);
+        $trajetAffiche['telephone'] = (string) $trajet['auteur_telephone'];
+        $trajetAffiche['email'] = (string) $trajet['auteur_email'];
         $trajetAffiche['est_auteur'] = (int) $trajet['id_employe'] === (int) $_SESSION['user']['id_employe'];
         $trajetsAffiches[] = $trajetAffiche;
     }

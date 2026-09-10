@@ -207,7 +207,7 @@ class TrajetController extends DefaultController {
         }
 
         if ($data['arrivee_timestamp'] <= $data['depart_timestamp']) {
-            return 'L’arrivée doit être aprés le départ.';
+            return 'L’arrivée doit être après le départ.';
         }
 
         return null;
