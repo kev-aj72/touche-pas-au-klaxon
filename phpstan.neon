@@ -7,3 +7,4 @@ parameters:
         - Core
         - Public
         - Router
+        - tests

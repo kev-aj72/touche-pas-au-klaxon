@@ -49,11 +49,9 @@ class AdminController extends DefaultController {
      * @return string Contenu HTML du tableau de bord.
      */
     public function index(): string {
-
-        $this->requireAdmin();
-        return $this->render('admin/dashboard');
-    }
-
+    $this->requireAdmin();
+    return $this->renderTrajetsPage('admin/dashboard');
+}
     /**
      * Affiche la liste des employés.
      *
@@ -176,22 +174,9 @@ class AdminController extends DefaultController {
      * @return string Contenu HTML de la liste.
      */
     public function trajets(): string {
-
-        $this->requireAdmin();
-        $trajetsAffiches = [];
-
-        foreach ($this->postModel->getAllTrajets() as $trajet) {
-            $trajetAffiche = $this->formatTrajet($trajet,'contact');
-            $trajetAffiche['telephone'] = $this->escape($trajet['auteur_telephone']);
-            $trajetAffiche['email'] = $this->escape($trajet['auteur_email']);
-            $trajetsAffiches[] = $trajetAffiche;
-        }
-        [$messageSucces, $messageErreur] =$this->pullFlashMessages();
-
-        return $this->render('admin/trajets',['trajetsAffiches' => $trajetsAffiches,
-                                              'messageSucces' => $messageSucces,
-                                              'messageErreur' => $messageErreur,]);
-    }
+    $this->requireAdmin();
+    return $this->renderTrajetsPage('admin/trajets');
+}
 
     /**
      * Supprime un trajet depuis l’administration.
@@ -261,6 +246,26 @@ class AdminController extends DefaultController {
             return 'Une agence utilise déjà ce nom.';
         }
         return null;
+    }
+
+    /**
+ * Prépare les trajets et affiche la page demandée.
+ *
+ * @param string $template Template à afficher.
+ * @return string Contenu HTML de la page.
+ */
+private function renderTrajetsPage(string $template): string {
+    $trajetsAffiches = [];
+    foreach ($this->postModel->getAllTrajets() as $trajet) {
+        $trajetAffiche = $this->formatTrajet($trajet,'contact');
+        $trajetAffiche['telephone'] = $this->escape($trajet['auteur_telephone']);
+        $trajetAffiche['email'] = $this->escape($trajet['auteur_email']);
+        $trajetAffiche['est_auteur'] = (int) $trajet['id_employe'] === (int) $_SESSION['user']['id_employe'];
+        $trajetsAffiches[] = $trajetAffiche;
+    }
+    [$messageSucces, $messageErreur,] = $this->pullFlashMessages();
+
+    return $this->render($template,['trajetsAffiches' => $trajetsAffiches,'messageSucces' => $messageSucces,'messageErreur' => $messageErreur,]);
     }
 }
 ?>
