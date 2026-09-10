@@ -84,6 +84,9 @@ class UserController extends DefaultController {
                   'email' => $employe['email'],
                   'role' => $employe['role']];
 
+        if ($employe['role'] === 'ADMIN') {
+        $this->redirect('/admin');
+        }
         $this->redirect('/');
     }
 

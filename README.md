@@ -175,4 +175,9 @@ Le projet est vérifié avec PHPStan au niveau 5.
 
 ## Tests
 
-Les tests PHPUnit couvriront les opérations d’écriture dans la base de données.
+Les tests PHPUnit couvrent les opérations de création, de modification et de suppression des agences et des trajets.
+Pour exécuter les tests sous Windows avec XAMPP :
+
+```
+& "C:\xampp\php\php.exe" ".\vendor\bin\phpunit"
+```
