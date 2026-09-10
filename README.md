@@ -176,8 +176,15 @@ Le projet est vérifié avec PHPStan au niveau 5.
 ## Tests
 
 Les tests PHPUnit couvrent les opérations de création, de modification et de suppression des agences et des trajets.
+
+Avant la première exécution des tests, importer le fichier
+`tests/Database/database-test.sql` dans phpMyAdmin.
+
+Ce fichier crée la base de données séparée
+`touche_pas_au_klaxon_test`.
+
 Pour exécuter les tests sous Windows avec XAMPP :
 
-```
+```powershell
 & "C:\xampp\php\php.exe" ".\vendor\bin\phpunit"
 ```

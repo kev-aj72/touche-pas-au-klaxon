@@ -30,7 +30,7 @@ trait FlashMessageTrait {
     protected function pullFlash(string $type): ?string {
         $message = $_SESSION[$type] ?? null;
         unset($_SESSION[$type]);
-        return $message !== null ? $this->escape((string) $message): null;
+        return $message !== null? (string) $message: null;
     }
 
     /**
