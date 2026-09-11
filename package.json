@@ -6,7 +6,7 @@
   "scripts": {
     "sass": "sass Public/assets/scss/app.scss Public/assets/css/app.css",
     "sass:watch": "sass --watch Public/assets/scss/app.scss Public/assets/css/app.css"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kev-aj72/touche-pas-au-klaxon.git"
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/kev-aj72/touche-pas-au-klaxon#readme",
   "dependencies": {
     "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
     "sass": "^1.102.0"
   }
 }

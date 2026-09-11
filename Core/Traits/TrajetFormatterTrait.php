@@ -26,7 +26,9 @@ trait TrajetFormatterTrait {
                 'ville_depart' => (string) $trajet['ville_depart'],
                 'ville_arrivee' => (string) $trajet['ville_arrivee'],
                 'date_depart' => $this->formatDate($trajet['date_heure_depart']),
+                'heure_depart' => $this->formatHeure($trajet['date_heure_depart']),
                 'date_arrivee' => $this->formatDate($trajet['date_heure_arrivee']),
+                'heure_arrivee' => $this->formatHeure($trajet['date_heure_arrivee']),
                 'places_total' => (int) $trajet['nombre_places_total'],
                 'places_disponibles' => (int) $trajet['nombre_places_disponibles'],
                 $auteurKey => (string) $trajet['auteur_prenom']. ' '. (string) $trajet['auteur_nom'],];
@@ -40,7 +42,18 @@ trait TrajetFormatterTrait {
      * @return string Date formatée.
      */
     private function formatDate(string $date): string {
-        return (new DateTimeImmutable($date))->format('d/m/Y à H:i');
+        return (new DateTimeImmutable($date))->format('d/m/Y');
+    }
+
+    /**
+ * Transforme une date SQL
+ * pour afficher uniquement l’heure.
+ *
+ * @param string $date Date provenant de MySQL.
+ * @return string Heure formatée.
+ */
+private function formatHeure(string $date): string {
+    return (new DateTimeImmutable($date))->format('H:i');
     }
 }
 ?>
