@@ -27,16 +27,17 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Départ</th>
-                        <th>Arrivée</th>
-                        <th>Date de départ</th>
-                        <th>Date d’arrivée</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Destination</th>
+                        <th>Date</th>
+                        <th>Heure</th>
                         <th>Places</th>
 
                         <!-- Actions réservées aux utilisateurs connectés -->
                         <?php if ($utilisateurConnecte !== null): ?>
-                            <th>Détails</th>
-                            <th>Actions</th>
-                        <?php endif; ?>
+                            <th><span class="visually-hidden">Actions</span></th>
+                                <?php endif; ?>
                     </tr>
                 </thead>
 
