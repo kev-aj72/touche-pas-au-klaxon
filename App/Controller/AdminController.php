@@ -64,10 +64,7 @@ class AdminController extends DefaultController {
 
         foreach ($this->userModel->getEmployes()as $employe) {
 
-            $employesAffiches[] = ['nom' => (string) $employe['nom'],
-                                   'prenom' => (string) $employe['prenom'],
-                                   'telephone' => (string) $employe['telephone'],
-                                   'email' => (string) $employe['email'],
+            $employesAffiches[] = ['nom' => (string) $employe['nom'], 'prenom' => (string) $employe['prenom'], 'telephone' => (string) $employe['telephone'], 'email' => (string) $employe['email'],
                                    'role' => (string) $employe['role']];
         }
         return $this->render('admin/employes',['employesAffiches' =>$employesAffiches,]);
@@ -85,14 +82,11 @@ class AdminController extends DefaultController {
         $agencesAffichees = [];
 
         foreach ($this->agenceModel->getAgences()as $agence) {
-            $agencesAffichees[] = ['id_agence' =>(int) $agence['id_agence'],
-                                   'ville' => (string) $agence['ville']];
+            $agencesAffichees[] = ['id_agence' =>(int) $agence['id_agence'], 'ville' => (string) $agence['ville']];
         }
         [$messageSucces, $messageErreur] = $this->pullFlashMessages();
 
-        return $this->render('admin/agences',['agencesAffichees' =>$agencesAffichees,
-                                              'messageSucces' =>$messageSucces,
-                                              'messageErreur' =>$messageErreur,]);
+        return $this->render('admin/agences',['agencesAffichees' =>$agencesAffichees, 'messageSucces' =>$messageSucces, 'messageErreur' =>$messageErreur,]);
     }
 
     /**

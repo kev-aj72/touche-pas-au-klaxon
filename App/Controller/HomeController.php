@@ -35,8 +35,7 @@ class HomeController extends DefaultController {
         $utilisateur = $_SESSION['user'] ?? null;
         $trajetsAffiches = [];
 
-        foreach ($this->postModel->getTrajets() as $trajet) {
-            
+        foreach ($this->postModel->getTrajets() as $trajet) {      
             $trajetAffiche = $this->formatTrajet($trajet,'contact');
             $trajetAffiche['telephone'] = (string) $trajet['auteur_telephone'];
             $trajetAffiche['email'] = (string) $trajet['auteur_email'];
