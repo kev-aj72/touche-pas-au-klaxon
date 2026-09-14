@@ -82,3 +82,4 @@ class AgenceModelTest extends TestCase {
         $query->execute(['ville' => 'Ville PHPUnit%',]);
     }
 }
+?>

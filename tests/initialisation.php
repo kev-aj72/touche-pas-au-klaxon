@@ -32,3 +32,4 @@ if (!str_ends_with($_ENV['DB_NAME'], '_test')) {
         'Les tests doivent utiliser une base séparée.'
     );
 }
+?>

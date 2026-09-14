@@ -137,3 +137,4 @@ class PostModelTest extends TestCase {
         $query->execute(['ville' => 'Agence PHPUnit%',]);
     }
 }
+?>

@@ -229,25 +229,12 @@ class TrajetController extends DefaultController {
         $dateArrivee = date('Y-m-d H:i:s',$data['arrivee_timestamp']);
 
         if ($idTrajet === null) {
-            $this->postModel->createTrajet(
-                $this->getUserId(),
-                $data['id_agence_depart'],
-                $data['id_agence_arrivee'],
-                $dateDepart,
-                $dateArrivee,
-                $data['nombre_places_total'],
-                $data['nombre_places_disponibles']);
-            return;
+            $this->postModel->createTrajet($this->getUserId(), $data['id_agence_depart'], $data['id_agence_arrivee'], $dateDepart, $dateArrivee,
+                   $data['nombre_places_total'], $data['nombre_places_disponibles']);
+                return;
         }
-        $this->postModel->updateTrajet(
-            $idTrajet,
-            $this->getUserId(),
-            $data['id_agence_depart'],
-            $data['id_agence_arrivee'],
-            $dateDepart,
-            $dateArrivee,
-            $data['nombre_places_total'],
-            $data['nombre_places_disponibles']);
+        $this->postModel->updateTrajet( $idTrajet, $this->getUserId(), $data['id_agence_depart'], $data['id_agence_arrivee'], $dateDepart,
+               $dateArrivee, $data['nombre_places_total'], $data['nombre_places_disponibles']);
     }
 
     /**
